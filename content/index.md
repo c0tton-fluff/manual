@@ -5,9 +5,9 @@ title: Commando Manual
 # Welcome to Commando Manual
 
 This page is solely dedicated to writeups and knowledge sharing. 
-<p align="center">
-## Always keep learning. **Be Useful!**
-</p>
+
+## Always keep learning. Be Useful!
+
 ---
 
 ### Certifications
