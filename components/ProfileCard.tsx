@@ -4,9 +4,8 @@ import { classNames } from "../quartz/util/lang"
 const ProfileCard: QuartzComponent = () => {
   return (
     <div class={classNames("card", "profile-card")}>
-      <div class="card-title">John Matrix</div>
+      <div class="card-title">Be Useful!</div>
       <div class="card-body">
-        <div>Notes, research, writeups</div>
       </div>
     </div>
   )
