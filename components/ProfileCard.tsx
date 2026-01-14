@@ -1,6 +1,7 @@
 import { QuartzComponent, QuartzComponentConstructor } from "./types"
 import { classNames } from "../quartz/util/lang"
 
+const ProfileImage = "/static/arnold.png"
 const ProfileCard: QuartzComponent = () => {
   return (
     <div class={classNames("card", "profile-card")}>
