@@ -1,10 +1,11 @@
 import { QuartzComponent, QuartzComponentConstructor } from "./types"
 import { classNames } from "../quartz/util/lang"
 
-const ProfileImage = "/static/arnold.png"
+const PROFILE_IMAGE = "/static/arnold.jpg"
 const ProfileCard: QuartzComponent = () => {
   return (
     <div class={classNames("card", "profile-card")}>
+      <img src={PROFILE_IMAGE} alt="John Matrix" class="profile-img" />
       <div class="card-title">John Matrix Manual</div>
       <div class="card-body">
       </div>
