@@ -1,6 +1,6 @@
 Today's daily challenge is a straightforward one, but I used BurpSuite with MCP server to solve as it as I am trying to learn and understand the AI impact.
 
-![Tanuki test](./img/tanuki-01.png)
+![Tanuki test](/BugForge/img/tanuki-01.png)
 
 # Recon 
 
