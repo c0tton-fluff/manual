@@ -12,7 +12,7 @@ Today's challenge: Broken Access Control
 ![Daily3](/BugForge/img/copy-03.png)
 
 - It went on to test all sorts...
-![Daily4](/BugForge/img/4opy-04.png)
+![Daily4](/BugForge/img/copy-04.png)
 ![Daily5](/BugForge/img/copy-05.png)
 
 - Again, I had to ask it to laser focus on what it was searching for
