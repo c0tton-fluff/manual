@@ -1,6 +1,6 @@
 Today's daily challenge is a straightforward one, but I used BurpSuite with MCP server to solve as it as I am trying to learn and understand the AI impact.
 
-![](Pasted%20image%2020260114095455.png)
+![Tanuki test](./img/tanuki-01.png)
 
 # Recon 
 
