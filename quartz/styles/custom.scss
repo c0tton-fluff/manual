@@ -501,73 +501,90 @@ ul.section-ul > li.section-li > div.section {
 }
 
 /* =========================
-   Mobile fix: stop header/sidebar overlaying content
+   MOBILE: force single column, remove left/right panels, stop overlap
    ========================= */
-
-@media (max-width: 800px) {
-  /* Hide the big left profile card on mobile */
-  .profile-card,
-  .profileCard,
-  .profile {
-    display: none !important;
+@media (max-width: 900px) {
+  /* Quartz layout containers (v4 common patterns) */
+  .page,
+  .page-layout,
+  .layout,
+  .container {
+    display: block !important;
   }
 
-  /* Hide the left sidebar entirely on mobile (you already have hamburger) */
+  /* Kill side columns no matter what they're called */
+  .left,
+  .right,
+  aside,
   .sidebar,
   .explorer,
   .toc,
-  .left {
+  nav.sidebar {
     display: none !important;
   }
 
-  /* Make the top header row smaller and non-overlapping */
+  /* Make center content full width and padded */
+  .center,
+  main,
+  article,
+  .content {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 1rem 1rem 2rem !important;
+  }
+
+  /* If a header exists, make it behave */
   header,
-  .header {
-    position: sticky;
-    top: 0;
-    z-index: 50;
+  .header,
+  .topbar,
+  .navbar {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 999 !important;
     padding: 0.6rem 0.8rem !important;
+    background: rgba(10, 12, 18, 0.85) !important;
     backdrop-filter: blur(10px);
-    background: rgba(10, 12, 18, 0.78) !important;
     border-bottom: 1px solid rgba(255, 255, 255, 0.06);
   }
 
-  /* Give main content breathing room below the sticky header */
-  main,
-  .page,
-  .center,
-  .content {
-    padding-top: 1rem !important;
+  /* If ProfileCard is being rendered anywhere on mobile, hide it */
+  .profile-card,
+  .profileCard,
+  [class*="profile"],
+  [class*="Profile"] {
+    display: none !important;
   }
 
-  /* Reduce the giant “BE USEFUL!” title on mobile */
+  /* Fix huge titles on mobile */
   h1,
-  .page-title,
-  .article-title {
-    font-size: 1.9rem !important;
+  .article-title,
+  .page-title {
+    font-size: 2rem !important;
     line-height: 1.15 !important;
     letter-spacing: 0 !important;
+    margin-top: 0.25rem !important;
   }
 
-  /* Make paragraphs readable on mobile */
+  /* Make text readable and stop weird wrapping */
   p,
   li {
-    font-size: 1.02rem !important;
-    line-height: 1.55 !important;
+    font-size: 1.05rem !important;
+    line-height: 1.6 !important;
   }
 
-  /* Stop code blocks forcing horizontal scroll */
+  /* Code blocks: prevent sideways scroll ruining the layout */
   pre,
   code {
     white-space: pre-wrap !important;
-    word-break: break-word !important;
     overflow-wrap: anywhere !important;
+    word-break: break-word !important;
   }
 
-  /* Checkboxes: bigger tap targets */
+  /* Checkboxes: better tap targets */
   input[type="checkbox"] {
     transform: scale(1.25);
-    margin-right: 0.55rem;
+    margin-right: 0.6rem;
   }
 }
 
