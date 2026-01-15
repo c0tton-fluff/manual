@@ -40,17 +40,17 @@ const config: QuartzConfig = {
           highlight: "rgba(143, 159, 169, 0.15)",
           textHighlight: "#fff23688",
         },
-        darkMode: {
-          light: "#1C1C2C",
-          lightgray: "#2A2A40",
-          gray: "#3A3A58",
-          darkgray: "#CCD4F4",
-          dark: "#FCB486",
-          secondary: "#FCB486",
-          tertiary: "#9EEE02",
-          highlight: "rgba(252, 180, 134, 0.18)",
-          textHighlight: "#e08d57",
-        },
+	// quartz.config.ts
+	darkMode: {
+	  light: "#1a1b26",      // Deep Navy Background
+	  lightgray: "#414868",  // Muted Blue-Grey for borders
+	  gray: "#7aa2f7",       // Soft Blue for dates/meta
+	  darkgray: "#cfc9c2",   // Off-white for body text
+	  dark: "#ffffff",       // Pure white for headers
+	  secondary: "#ff9e64",  // Warm Orange for links and "Be Useful!"
+	  tertiary: "#bb9af7",   // Soft Purple for highlights/hover
+	  highlight: "rgba(122, 162, 247, 0.1)",
+	},
       },
     },
   },

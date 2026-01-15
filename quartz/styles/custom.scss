@@ -1,44 +1,307 @@
 @use "./base.scss";
 
-// put your custom CSS here!
+// 1. GLOBAL UI RESET
+.popover { display: none !important; }
 
-/* Mobile fixes */
-@media (max-width: 800px) {
-  h1 {
-    font-size: 2.2rem;
-    line-height: 1.2;
-    word-break: break-word;
+body {
+  background-color: var(--light) !important;
+  color: var(--darkgray) !important;
+  font-family: 'JetBrains Mono', monospace !important;
+  background-image: 
+    linear-gradient(rgba(65, 72, 104, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(65, 72, 104, 0.08) 1px, transparent 1px) !important;
+  background-size: 40px 40px;
+}
+
+// 2. CLEAN SIDEBAR & TOC (ZERO BOXES / ZERO GHOSTS)
+.sidebar, .explorer, .toc, .folder-container {
+  scrollbar-width: none;
+  &::-webkit-scrollbar { display: none !important; }
+  background: none !important;
+  border: none !important;
+
+  ul { 
+    list-style: none !important; 
+    padding-left: 0.8rem !important; 
+    margin: 0 !important;
   }
-
-  .page-title, .article-title {
-    word-break: break-word;
-  }
-
-  img {
-    max-width: 100%;
-    height: auto;
-  }
-
-  table {
-    display: block;
-    overflow-x: auto;
-    white-space: nowrap;
+  
+  li {
+    &::marker, &::before { content: none !important; display: none !important; }
+    background: none !important;
+    
+    a::before {
+      content: "❯" !important;
+      color: var(--secondary);
+      margin-right: 10px;
+      font-size: 0.8rem;
+      opacity: 0.4;
+    }
   }
 }
 
-.profile-img {
-  width: 140px;
-  height: 140px;
-  border-radius: 9999px;
-  object-fit: cover;
-  margin: 0 auto 1rem;
-  display: block;
+// 3. TABLE OF CONTENTS (Radar Style)
+.toc {
+  border-left: 1px solid var(--lightgray) !important;
+  max-height: none !important;
+  overflow: visible !important;
+  
+  li a.active {
+    color: var(--secondary) !important;
+    font-weight: bold;
+
+    &::before {
+      content: "●";
+      margin-right: 8px;
+      text-shadow: 0 0 10px var(--secondary);
+    }
+  }
 }
 
-@media (max-width: 768px) {
-  .profile-img {
-    width: 110px;
-    height: 110px;
+/* ------------------------------------------------------------------ */
+/* 4A. FOLDER TILES (CENTERED & COMPACT + FUNKY DATE CHIP)            */
+/* ------------------------------------------------------------------ */
+
+.folder-content li {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  gap: 16px !important;
+  margin-bottom: 12px !important;
+}
+
+/* Date chip is the first child in each folder row */
+.folder-content li > :first-child {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  min-width: 110px !important;
+  padding: 10px 12px !important;
+
+  border-radius: 12px !important;
+  border: 1px solid rgba(255, 158, 100, 0.25) !important;
+
+  background: linear-gradient(
+    180deg,
+    rgba(255, 158, 100, 0.12),
+    rgba(255, 158, 100, 0.03)
+  ) !important;
+
+  box-shadow:
+    0 0 0 1px rgba(255, 158, 100, 0.08),
+    0 10px 24px rgba(0, 0, 0, 0.55) !important;
+
+  color: rgba(255, 220, 200, 0.85) !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.6px !important;
+  text-transform: uppercase !important;
+
+  line-height: 1.15 !important;
+  font-size: 0.9rem !important;
+
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+/* Sheen scanline */
+.folder-content li > :first-child::after {
+  content: "" !important;
+  position: absolute !important;
+  inset: -40% -60% !important;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 158, 100, 0.18),
+    transparent
+  ) !important;
+  transform: rotate(20deg) !important;
+  opacity: 0.65 !important;
+  pointer-events: none !important;
+}
+
+/* Tile itself */
+.folder-content a {
+  display: inline-block !important;
+  padding: 10px 30px !important; 
+  margin: 0 !important;
+  min-width: 220px !important;
+  text-align: center !important;
+
+  border-radius: 8px !important;
+  border: 1px solid rgba(255, 158, 100, 0.35) !important;
+
+  background: linear-gradient(
+    180deg,
+    rgba(255, 158, 100, 0.08),
+    rgba(255, 158, 100, 0.03)
+  ) !important;
+
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5) !important;
+  text-decoration: none !important;
+  position: relative !important;
+  transition: all 180ms ease !important;
+}
+
+/* Accent bar for smaller box */
+.folder-content a::before {
+  content: "" !important;
+  position: absolute !important;
+  left: 0 !important;
+  top: 8px !important;
+  bottom: 8px !important;
+  width: 2px !important;
+  background: var(--secondary) !important;
+  opacity: 0.6 !important;
+}
+
+/* Hover state for tile */
+.folder-content a:hover {
+  border-color: rgba(0, 255, 120, 0.85) !important;
+  background: rgba(0, 255, 120, 0.05) !important;
+  box-shadow: 0 0 15px rgba(0, 255, 120, 0.2) !important;
+  transform: translateY(-2px) !important;
+}
+
+/* Hover linkage for date chip when row is hovered */
+.folder-content li:hover > :first-child {
+  border-color: rgba(0, 255, 120, 0.55) !important;
+
+  background: linear-gradient(
+    180deg,
+    rgba(0, 255, 120, 0.12),
+    rgba(0, 255, 120, 0.03)
+  ) !important;
+
+  box-shadow:
+    0 0 0 1px rgba(0, 255, 120, 0.15),
+    0 12px 30px rgba(0, 0, 0, 0.65) !important;
+
+  color: rgba(220, 255, 235, 0.95) !important;
+}
+
+.folder-content li:hover > :first-child::after {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(0, 255, 120, 0.18),
+    transparent
+  ) !important;
+}
+
+/* ------------------------------------------------------------------ */
+/* 4B. SECTION LINKS (UNIFIED & CENTERED)                             */
+/* ------------------------------------------------------------------ */
+
+.section-li {
+  display: flex !important;
+  justify-content: center !important;
+}
+
+.section-li a {
+  display: inline-block !important;
+  padding: 10px 30px !important;
+  margin-bottom: 8px !important;
+  text-align: center !important;
+
+  background: rgba(255, 158, 100, 0.02) !important; 
+  border: 1px solid rgba(255, 158, 100, 0.18) !important;
+  color: var(--secondary) !important;
+
+  text-decoration: none !important;
+  min-width: 220px !important; 
+  border-radius: 8px !important;
+  transition: all 180ms ease !important;
+
+  &::before { content: none !important; }
+}
+
+.section-li a:hover {
+  background: rgba(0, 255, 120, 0.07) !important;
+  border-color: rgba(0, 255, 120, 0.8) !important;
+  box-shadow: 0 0 12px rgba(0, 255, 120, 0.2) !important;
+  transform: translateY(-1px) !important;
+  color: #ffffff !important;
+}
+
+// 5. THE SUPERB HIGHLIGHTS (Gold Badges)
+code {
+  background-color: rgba(255, 158, 100, 0.1) !important; 
+  color: #ff9e64 !important; 
+  border: 1px solid rgba(255, 158, 100, 0.25) !important; 
+  padding: 0.1rem 0.4rem !important;
+  border-radius: 3px !important;
+  font-size: 85%;
+}
+
+// 6. TERMINAL CODE BLOCKS (PURE BLACK & NO HEADER)
+pre, 
+code[class*="language-"], 
+pre[class*="language-"] {
+  background-color: #000000 !important; // Forces true black background
+  background: #000000 !important;       // Secondary override
+  border: 1px solid var(--lightgray) !important;
+  padding: 1.5rem !important;
+  position: relative;
+  border-radius: 4px;
+  box-shadow: none !important; // Removes any glowing red shadows
+  
+  // This kills the "TERMINAL_OUTPUT" header
+  &::before {
+    display: none !important;
+    content: none !important;
   }
+}
+
+// Removes the background from the inner code span
+code {
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+}
+
+// Specific fix for the reddish highlight often found in Quartz/Prism themes
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+  color: #565f89 !important; // Sets comments to a muted blue/gray
+}
+// 7. BRANDING & DIVIDERS
+.sidebar img { border: 1px solid var(--secondary); padding: 4px; background: var(--light); }
+
+.sidebar .page-title a {
+  color: var(--secondary) !important;
+  text-transform: uppercase;
+  text-shadow: 0 0 10px rgba(255, 158, 100, 0.3);
+}
+
+hr {
+  border: none !important;
+  border-top: 1px solid var(--lightgray) !important;
+  margin: 4rem 0 !important;
+  position: relative;
+  overflow: visible !important;
+
+  &::after {
+    content: "◆" !important;
+    position: absolute;
+    left: 50%; top: -11px;
+    color: var(--secondary);
+    background: #1a1b26; 
+    padding: 0 10px;
+  }
+}
+/* Wrap long code lines instead of horizontal scroll */
+pre,
+code {
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+/* Optional: reduce horizontal scrollbar aggression */
+pre {
+  overflow-x: auto;
 }
 

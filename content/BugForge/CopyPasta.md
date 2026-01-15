@@ -2,6 +2,8 @@ Today's challenge: Broken Access Control
 
 ![Daily](/BugForge/img/copy-01.png)
 
+## Enumeration
+
 - We can register as usual
 - As normal, we can click around the page to find more of the functionality 
 
@@ -10,6 +12,8 @@ Today's challenge: Broken Access Control
 - Continuing enumeration, we switch over to the Burp MCP and let it run to find issues
 
 ![Daily3](/BugForge/img/copy-03.png)
+
+## MCP
 
 - It went on to test all sorts...
 ![Daily4](/BugForge/img/copy-04.png)

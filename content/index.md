@@ -1,8 +1,6 @@
 ---
-title: Commando Manual
+title: Welcome to Commando Manual
 ---
-
-# Welcome to Commando Manual
 
 This page is solely dedicated to writeups and knowledge sharing. 
 
