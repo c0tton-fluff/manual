@@ -500,3 +500,74 @@ ul.section-ul > li.section-li > div.section {
   grid-template-columns: 1fr auto;
 }
 
+/* =========================
+   Mobile fix: stop header/sidebar overlaying content
+   ========================= */
+
+@media (max-width: 800px) {
+  /* Hide the big left profile card on mobile */
+  .profile-card,
+  .profileCard,
+  .profile {
+    display: none !important;
+  }
+
+  /* Hide the left sidebar entirely on mobile (you already have hamburger) */
+  .sidebar,
+  .explorer,
+  .toc,
+  .left {
+    display: none !important;
+  }
+
+  /* Make the top header row smaller and non-overlapping */
+  header,
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    padding: 0.6rem 0.8rem !important;
+    backdrop-filter: blur(10px);
+    background: rgba(10, 12, 18, 0.78) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  /* Give main content breathing room below the sticky header */
+  main,
+  .page,
+  .center,
+  .content {
+    padding-top: 1rem !important;
+  }
+
+  /* Reduce the giant “BE USEFUL!” title on mobile */
+  h1,
+  .page-title,
+  .article-title {
+    font-size: 1.9rem !important;
+    line-height: 1.15 !important;
+    letter-spacing: 0 !important;
+  }
+
+  /* Make paragraphs readable on mobile */
+  p,
+  li {
+    font-size: 1.02rem !important;
+    line-height: 1.55 !important;
+  }
+
+  /* Stop code blocks forcing horizontal scroll */
+  pre,
+  code {
+    white-space: pre-wrap !important;
+    word-break: break-word !important;
+    overflow-wrap: anywhere !important;
+  }
+
+  /* Checkboxes: bigger tap targets */
+  input[type="checkbox"] {
+    transform: scale(1.25);
+    margin-right: 0.55rem;
+  }
+}
+
