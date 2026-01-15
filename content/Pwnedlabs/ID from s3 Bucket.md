@@ -1,10 +1,5 @@
 
-
-#### AWS credentials and IP address
-- 54.204.171.32
-- Access key: AKIAWHEOTHRFW4CEP7HK
-- Secret: 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
-- Role we can assume is **arn:aws:iam::427648302155:role/LeakyBucket**
+- Role we can assume is **arn:aws:iam::42764830xxxx:role/LeakyBucket**
 
 ### Scenario
 
@@ -16,7 +11,7 @@ The ability to expose and leverage even the smallest oversights is a coveted ski
 ```shell
 [Dec 03, 2025 - 12:34:57 (GMT)] exegol-pwned-labs /workspace # aws s3 ls
 
-An error occurred (AccessDenied) when calling the ListBuckets operation: User: arn:aws:iam::427648302155:user/s3user is not authorized to perform: s3:ListAllMyBuckets because no identity-based policy allows the s3:ListAllMyBuckets action
+An error occurred (AccessDenied) when calling the ListBuckets operation: User: arn:aws:iam::42764830xxxx:user/s3user is not authorized to perform: s3:ListAllMyBuckets because no identity-based policy allows the s3:ListAllMyBuckets action
 ```
 
 - Cannot list buckets
@@ -90,9 +85,9 @@ Nmap done: 1 IP address (1 host up) scanned in 0.29 seconds
 
 ```shell
 {
-    "UserId": "AIDAWHEOTHRF62U7I6AWZ",
-    "Account": "427648302155",
-    "Arn": "arn:aws:iam::427648302155:user/s3user"
+    "UserId": "AIDAWHEOTHRF62U7XXXX",
+    "Account": "42764830xxxx",
+    "Arn": "arn:aws:iam::42764830xxxx:user/s3user"
 }
 ```
 

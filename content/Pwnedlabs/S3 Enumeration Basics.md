@@ -75,8 +75,8 @@ Archive:  hl_migration_project.zip
   inflating: migrate_secrets.ps1
 [Dec 03, 2025 - 13:36:51 (GMT)] exegol-pwned-labs /workspace # cat migrate_secrets.ps1
 # AWS Configuration
-$accessKey = "AKIA3SFMDAPOWOWKXEHU"
-$secretKey = "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"
+$accessKey = "AKIA3SFMDAPOWOWKXXXX"
+$secretKey = "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"
 $region = "us-east-1"
 ```
 
@@ -85,8 +85,8 @@ $region = "us-east-1"
 
 ```powershell
 # AWS Configuration
-$accessKey = "AKIA3SFMDAPOWOWKXEHU"
-$secretKey = "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"
+$accessKey = "AKIA3SFMDAPOWOWKXXXX"
+$secretKey = "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"
 $region = "us-east-1"
 
 # Set up AWS hardcoded credentials
@@ -156,16 +156,16 @@ Write-Output "Batch upload complete!"
 
 ```shell
 [Dec 03, 2025 - 13:36:57 (GMT)] exegol-pwned-labs /workspace # aws configure
-AWS Access Key ID [None]: AKIA3SFMDAPOWOWKXEHU
-AWS Secret Access Key [None]: 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
+AWS Access Key ID [None]: AKIA3SFMDAPOWOWKXXXX
+AWS Secret Access Key [None]: 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
 Default region name [None]: us-east-1
 Default output format [None]: json
 [Dec 03, 2025 - 13:40:14 (GMT)] exegol-pwned-labs /workspace # aws sts get-caller-identity
 
 {
-    "UserId": "AIDA3SFMDAPOYPM3X2TB7",
-    "Account": "794929857501",
-    "Arn": "arn:aws:iam::794929857501:user/pam-test"
+    "UserId": "AIDA3SFMDAPOYPM3XXXXX",
+    "Account": "79492985xxxx",
+    "Arn": "arn:aws:iam::79492985xxxx:user/pam-test"
 }
 ```
 
@@ -264,15 +264,15 @@ download: s3://dev.huge-logistics.com/migration-files/test-export.xml to ./test-
 
 ```shell
 [Dec 03, 2025 - 13:45:15 (GMT)] exegol-pwned-labs /workspace # aws configure
-AWS Access Key ID [****************XEHU]: AKIA3SFMDAPOQRFWFGCD
-AWS Secret Access Key [****************/gb9]: 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
+AWS Access Key ID [****************XEHU]: AKIA3SFMDAPOQRFWXXXX
+AWS Secret Access Key [****************/gb9]: t21ERPmDq5C1QN55dxOOGTclN9mAaJ0bnL4hxxxx
 Default region name [us-east-1]:
 Default output format [json]:
 
 {
-    "UserId": "AIDA3SFMDAPOWKM6ICH4K",
-    "Account": "794929857501",
-    "Arn": "arn:aws:iam::794929857501:user/it-admin"
+    "UserId": "AIDA3SFMDAPOWKM6IXXXX",
+    "Account": "79492985xxxx",
+    "Arn": "arn:aws:iam::79492985xxxx:user/it-admin"
 }
 ```
 
