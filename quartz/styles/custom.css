@@ -1,0 +1,71 @@
+/* GitBook-ish folder index cards */
+
+.folder-page ul,
+.folder ul,
+.folder-contents ul {
+  list-style: none;
+  padding-left: 0;
+  margin: 1.25rem 0 0 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 16px;
+}
+
+.folder-page li,
+.folder ul li,
+.folder-contents li {
+  margin: 0;
+}
+
+.folder-page a,
+.folder ul li a,
+.folder-contents li a {
+  display: block;
+  padding: 18px 18px;
+  border: 1px solid rgba(255,255,255,0.10);
+  border-radius: 12px;
+  background: rgba(255,255,255,0.03);
+  text-decoration: none;
+  transition: transform 120ms ease, background 120ms ease, border-color 120ms ease;
+}
+
+.folder-page a:hover,
+.folder ul li a:hover,
+.folder-contents li a:hover {
+  transform: translateY(-1px);
+  background: rgba(255,255,255,0.05);
+  border-color: rgba(255,255,255,0.16);
+}
+
+/* Make titles look like GitBook buttons */
+.folder-page a .title,
+.folder-page a span,
+.folder-contents a span {
+  font-weight: 600;
+  letter-spacing: 0.2px;
+}
+
+/* If dates are shown next to items, tone them down */
+.folder-page time,
+.folder-page .date,
+.folder-contents time,
+.folder-contents .date {
+  opacity: 0.55;
+  font-size: 0.9em;
+}
+
+/* Wider content like docs */
+article {
+  max-width: 1100px;
+}
+
+/* More breathing room */
+h1 {
+  margin-top: 0.2rem;
+  margin-bottom: 1.0rem;
+}
+
+h2 {
+  margin-top: 2.0rem;
+}
+

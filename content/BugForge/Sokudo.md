@@ -2,6 +2,10 @@
 - Recently, I came across a very helpful addition in testing APIs
 - Definitely worth getting it! - https://gist.github.com/jhaddix/daba27d11fdd97d9077d610dccbe91df
 	- It is invaluable in testing and uncovers many hidden paths
+    - Super easy to save too:
+        - Copy the script and save a new tab
+        - Instead of URL you paste in the script, name it, and you are good to go
+        - When testing, just click on it and it will take few seconds and spit out a nice page for you
 
 ## Enumeration
 
