@@ -2,7 +2,7 @@
 title: Methodology
 order: 1
 ---
-# Methodology checks 
+# Sanity checks 
 
 #### Fuzzing
 
