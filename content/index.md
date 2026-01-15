@@ -8,6 +8,16 @@ This page is solely dedicated to writeups and knowledge sharing.
 
 ---
 
+## Sections
+
+- [Methodology](/Methodology/)
+- [BugForge](/BugForge/)
+- [Hacksmarter](/Hacksmarter/)
+- [Hackthebox](/Hackthebox/)
+- [PwnedLabs](/PwnedLabs/)
+
+---
+
 ### Certifications
 
 | Certification | Year | Focus                                                                         |
@@ -25,11 +35,5 @@ This page is solely dedicated to writeups and knowledge sharing.
 | ------------------------------------------------------ | -------- |
 | **Bachelor of Applied Cybersecurity – SANS Institute** | 2026     |
 
----
 
-## Sections
 
-- [BugForge](/BugForge/)
-- [Hacksmarter](/Hacksmarter/)
-- [Hackthebox](/Hackthebox/)
-- [PwnedLabs](/PwnedLabs/)
