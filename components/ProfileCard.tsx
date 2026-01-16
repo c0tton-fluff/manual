@@ -6,9 +6,7 @@ const ProfileCard: QuartzComponent = () => {
   return (
     <div class={classNames("card", "profile-card")}>
       <img src={PROFILE_IMAGE} alt="John Matrix" class="profile-img" />
-      <div class="card-title">Be Useful! 💪</div>
-      <div class="card-body">
-      </div>
+      <div class="card-body"></div>
     </div>
   )
 }

@@ -14,7 +14,7 @@ title: Welcome to Commando Manual
   <a class="section-chip" href="/PwnedLabs/">PwnedLabs</a>
 </div>
 
-## Always keep learning. Be Useful! 🧠💪
+## 🧠 Always keep learning. Be Useful! 💪
 
 ---
 
