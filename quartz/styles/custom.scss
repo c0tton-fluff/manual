@@ -414,6 +414,10 @@ hr {
     padding: 0 10px;
   }
 }
+
+body[data-slug="index"] hr {
+  display: none !important;
+}
 /* Wrap long code lines instead of horizontal scroll */
 pre,
 code {
@@ -777,6 +781,14 @@ body[data-slug="index"] .article-title {
 body[data-slug="index"] h2,
 body[data-slug="index"] h3 {
   text-align: center;
+}
+
+body[data-slug="index"] .content h3 {
+  margin-top: 2.6rem !important;
+}
+
+body[data-slug="index"] .content h2 {
+  margin-bottom: 2.2rem !important;
 }
 
 /* =========================

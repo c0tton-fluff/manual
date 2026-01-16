@@ -18,7 +18,7 @@ title: Welcome to Commando Manual
 
 ---
 
-### Certifications
+<br><br>
 
 | Certification | Year | Focus                                                                         |
 | ------------- | ---- | ----------------------------------------------------------------------------- |
