@@ -27,7 +27,7 @@
 
 ![Daily](/BugForge/img/shady-05.png)
 
-- `Ran the two-step test.
+- Ran the two-step test.
 	- `Step 1: /api/admin/flag`
 		- No auth → 401 {"error":"Access token required"}
 		- With tester JWT (role=user) → 200 {"flag":"`bug{rWROg3bOL7OOlxN5gkf5gDqfIYurhtCg}`"}
