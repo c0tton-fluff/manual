@@ -216,29 +216,40 @@ body {
 }
 
 .section-li a {
-  display: inline-block !important;
-  padding: 10px 30px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 10px 22px !important;
   margin-bottom: 8px !important;
   text-align: center !important;
 
-  background: rgba(255, 158, 100, 0.02) !important; 
-  border: 1px solid rgba(255, 158, 100, 0.18) !important;
-  color: var(--secondary) !important;
+  background:
+    radial-gradient(120% 160% at 20% 0%, rgba(255, 184, 120, 0.15), transparent 60%),
+    linear-gradient(180deg, rgba(18, 20, 26, 0.98), rgba(14, 16, 22, 0.98)) !important;
+  border: 1px solid rgba(255, 168, 84, 0.35) !important;
+  color: #ffb86b !important;
 
   text-decoration: none !important;
   min-width: 220px !important; 
-  border-radius: 8px !important;
-  transition: all 180ms ease !important;
+  border-radius: 999px !important;
+  letter-spacing: 0.25px !important;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 184, 120, 0.06),
+    0 8px 18px rgba(0, 0, 0, 0.45) !important;
+  transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease, color 160ms ease, background 160ms ease !important;
 
   &::before { content: none !important; }
 }
 
 .section-li a:hover {
-  background: rgba(0, 255, 120, 0.07) !important;
-  border-color: rgba(0, 255, 120, 0.8) !important;
-  box-shadow: 0 0 12px rgba(0, 255, 120, 0.2) !important;
+  background:
+    linear-gradient(180deg, rgba(255, 194, 120, 0.96), rgba(255, 157, 64, 0.94)) !important;
+  border-color: rgba(255, 187, 120, 0.75) !important;
+  box-shadow:
+    0 10px 24px rgba(0, 0, 0, 0.45),
+    0 0 18px rgba(255, 159, 80, 0.35) !important;
   transform: translateY(-1px) !important;
-  color: #ffffff !important;
+  color: #141414 !important;
 }
 
 /* ------------------------------------------------------------------ */
@@ -253,60 +264,63 @@ h2:has(+ .section-chips) {
 .section-chips {
   display: flex !important;
   flex-wrap: wrap !important;
-  gap: 10px 12px !important;
+  gap: 12px 14px !important;
   justify-content: center !important;
-  margin: 1.1rem 0 1.2rem !important;
+  margin: 1.2rem 0 1.4rem !important;
 }
 
 .section-chip {
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
-  padding: 8px 16px !important;
+  padding: 10px 22px !important;
   border-radius: 999px !important;
-  border: 1px solid rgba(255, 158, 100, 0.28) !important;
-  background: linear-gradient(
-    180deg,
-    rgba(255, 158, 100, 0.10),
-    rgba(255, 158, 100, 0.03)
-  ) !important;
-  color: var(--secondary) !important;
+  border: 1px solid rgba(255, 168, 84, 0.35) !important;
+  background:
+    radial-gradient(120% 160% at 20% 0%, rgba(255, 184, 120, 0.15), transparent 60%),
+    linear-gradient(180deg, rgba(18, 20, 26, 0.98), rgba(14, 16, 22, 0.98)) !important;
+  color: #ffb86b !important;
   text-decoration: none !important;
   font-weight: 600 !important;
-  letter-spacing: 0.2px !important;
-  transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease, color 160ms ease !important;
+  letter-spacing: 0.25px !important;
+  text-transform: none !important;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 184, 120, 0.06),
+    0 8px 18px rgba(0, 0, 0, 0.45) !important;
+  transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease, color 160ms ease, background 160ms ease !important;
   position: relative !important;
   overflow: hidden !important;
 }
 
 .section-chip:hover {
-  border-color: rgba(0, 255, 120, 0.8) !important;
-  color: #ffffff !important;
-  box-shadow: 0 0 14px rgba(0, 255, 120, 0.2) !important;
+  border-color: rgba(255, 187, 120, 0.75) !important;
+  color: #141414 !important;
+  background:
+    linear-gradient(180deg, rgba(255, 194, 120, 0.96), rgba(255, 157, 64, 0.94)) !important;
+  box-shadow:
+    0 10px 24px rgba(0, 0, 0, 0.45),
+    0 0 18px rgba(255, 159, 80, 0.35) !important;
   transform: translateY(-1px) !important;
 }
 
 .section-chip:active {
   transform: translateY(0) scale(0.98) !important;
-  box-shadow: 0 0 10px rgba(0, 255, 120, 0.18) !important;
+  box-shadow: 0 0 12px rgba(255, 159, 80, 0.25) !important;
 }
 
-.section-chip::after {
-  content: "" !important;
-  position: absolute !important;
-  inset: 0 !important;
-  background: radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.18), transparent 55%) !important;
-  opacity: 0 !important;
-  transition: opacity 160ms ease !important;
-  pointer-events: none !important;
-}
-
-.section-chip:hover::after {
-  opacity: 1 !important;
+.section-chip[aria-current="page"],
+.section-chip.is-active {
+  border-color: rgba(255, 170, 96, 0.95) !important;
+  color: #1b1207 !important;
+  background:
+    linear-gradient(180deg, rgba(255, 198, 122, 1), rgba(255, 148, 56, 1)) !important;
+  box-shadow:
+    0 12px 26px rgba(0, 0, 0, 0.5),
+    0 0 22px rgba(255, 145, 56, 0.45) !important;
 }
 
 .section-chip:focus-visible {
-  outline: 2px solid rgba(0, 255, 120, 0.6) !important;
+  outline: 2px solid rgba(255, 180, 110, 0.75) !important;
   outline-offset: 2px !important;
 }
 
@@ -416,6 +430,10 @@ hr {
 }
 
 body[data-slug="index"] hr {
+  display: none !important;
+}
+
+body:has(.page-listing) hr {
   display: none !important;
 }
 /* Wrap long code lines instead of horizontal scroll */
