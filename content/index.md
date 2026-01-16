@@ -11,7 +11,7 @@ title: Welcome to Commando Manual
   <a class="section-chip" href="/BugForge/">BugForge</a>
   <a class="section-chip" href="/Hacksmarter/">Hacksmarter</a>
   <a class="section-chip" href="/Hackthebox/">Hackthebox</a>
-  <a class="section-chip" href="/PwnedLabs/">PwnedLabs</a>
+  <a class="section-chip" href="/Pwnedlabs/">Pwnedlabs</a>
 </div>
 
 ## 🧠 Always keep learning. Be Useful! 💪
