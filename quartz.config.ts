@@ -42,14 +42,14 @@ const config: QuartzConfig = {
         },
 	// quartz.config.ts
 	darkMode: {
-	  light: "#1a1b26",      // Deep Navy Background
-	  lightgray: "#414868",  // Muted Blue-Grey for borders
-	  gray: "#7aa2f7",       // Soft Blue for dates/meta
-	  darkgray: "#cfc9c2",   // Off-white for body text
+	  light: "#12131c",      // Deep near-black background
+	  lightgray: "#2a2f45",  // Dark steel for borders
+	  gray: "#7f88a8",       // Cool gray-blue for dates/meta
+	  darkgray: "#d0ccd6",   // Soft cool off-white for body text
 	  dark: "#ffffff",       // Pure white for headers
-	  secondary: "#ff9e64",  // Warm Orange for links and "Be Useful!"
-	  tertiary: "#bb9af7",   // Soft Purple for highlights/hover
-	  highlight: "rgba(122, 162, 247, 0.1)",
+	  secondary: "#b47a2a",  // Brass for links/accents
+	  tertiary: "#6fa4c8",   // Muted teal-blue for hover/highlights
+	  highlight: "rgba(180, 122, 42, 0.12)",
 	},
       },
     },
