@@ -1,7 +1,4 @@
----
-title: Methodology
-order: 1
----
+
 # Sanity checks 
 
 #### Fuzzing
