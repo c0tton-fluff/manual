@@ -1121,6 +1121,51 @@ pre:hover > .clipboard-button {
     margin-top: 0.25rem !important;
   }
 
+  h2 {
+    font-size: 1.4rem !important;
+    letter-spacing: 0.02em !important;
+  }
+
+  h3 {
+    font-size: 1.1rem !important;
+  }
+
+  .section-chip {
+    padding: 10px 16px !important;
+    min-height: 44px !important;
+  }
+
+  .section-chips {
+    gap: 8px 10px !important;
+  }
+
+  .folder-intro {
+    max-width: 100% !important;
+    margin: 0.6rem 0 1rem !important;
+    padding: 0.6rem 0.8rem !important;
+  }
+
+  .sidebar,
+  .explorer,
+  .toc {
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+  }
+
+  .content table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .content table thead,
+  .content table tbody,
+  .content table tr,
+  .content table th,
+  .content table td {
+    white-space: nowrap;
+  }
+
   /* Make text readable and stop weird wrapping */
   p,
   li {
