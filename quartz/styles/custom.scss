@@ -45,6 +45,23 @@ body {
   border-left: 1px solid var(--lightgray) !important;
   max-height: none !important;
   overflow: visible !important;
+  font-size: 0.95rem !important;
+  padding: 0.5rem 0.7rem !important;
+  background: rgba(255, 255, 255, 0.02) !important;
+  border-radius: 10px !important;
+
+  ul {
+    padding-left: 0.6rem !important;
+  }
+
+  li {
+    margin: 0.2rem 0 !important;
+  }
+
+  ul > li:not(:last-child) {
+    padding-bottom: 0.2rem !important;
+    border-bottom: 1px solid rgba(65, 72, 104, 0.25) !important;
+  }
   
   li a.active {
     color: var(--secondary) !important;
@@ -224,6 +241,75 @@ body {
   color: #ffffff !important;
 }
 
+/* ------------------------------------------------------------------ */
+/* 4C. SECTION CHIPS (INLINE, WRAPPED, CLICKABLE)                      */
+/* ------------------------------------------------------------------ */
+
+h2:has(+ .section-chips) {
+  text-align: center !important;
+  letter-spacing: 0.6px !important;
+}
+
+.section-chips {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 10px 12px !important;
+  justify-content: center !important;
+  margin: 1.1rem 0 1.2rem !important;
+}
+
+.section-chip {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 8px 16px !important;
+  border-radius: 999px !important;
+  border: 1px solid rgba(255, 158, 100, 0.28) !important;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 158, 100, 0.10),
+    rgba(255, 158, 100, 0.03)
+  ) !important;
+  color: var(--secondary) !important;
+  text-decoration: none !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.2px !important;
+  transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease, color 160ms ease !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+.section-chip:hover {
+  border-color: rgba(0, 255, 120, 0.8) !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 14px rgba(0, 255, 120, 0.2) !important;
+  transform: translateY(-1px) !important;
+}
+
+.section-chip:active {
+  transform: translateY(0) scale(0.98) !important;
+  box-shadow: 0 0 10px rgba(0, 255, 120, 0.18) !important;
+}
+
+.section-chip::after {
+  content: "" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  background: radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.18), transparent 55%) !important;
+  opacity: 0 !important;
+  transition: opacity 160ms ease !important;
+  pointer-events: none !important;
+}
+
+.section-chip:hover::after {
+  opacity: 1 !important;
+}
+
+.section-chip:focus-visible {
+  outline: 2px solid rgba(0, 255, 120, 0.6) !important;
+  outline-offset: 2px !important;
+}
+
 // 5. THE SUPERB HIGHLIGHTS (Gold Badges)
 code {
   background-color: rgba(255, 158, 100, 0.1) !important; 
@@ -268,7 +354,14 @@ code {
   color: #565f89 !important; // Sets comments to a muted blue/gray
 }
 // 7. BRANDING & DIVIDERS
-.sidebar img { border: 1px solid var(--secondary); padding: 4px; background: var(--light); }
+.sidebar img {
+  border: 1px solid var(--secondary);
+  padding: 4px;
+  background: var(--light);
+  max-width: 90%;
+  display: block;
+  margin: 0 auto 0.35rem;
+}
 
 .sidebar .page-title a {
   color: var(--secondary) !important;
@@ -276,10 +369,33 @@ code {
   text-shadow: 0 0 10px rgba(255, 158, 100, 0.3);
 }
 
+/* Give the main column a little extra breathing room */
+.center,
+main,
+article,
+.content {
+  padding-top: 1.2rem;
+}
+
+/* Give the main content column a subtle panel to separate from the grid */
+main article,
+.content {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.03),
+    rgba(255, 255, 255, 0.01)
+  );
+  border: 1px solid rgba(65, 72, 104, 0.25);
+  border-radius: 12px;
+  padding: 1.2rem 1.4rem;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+}
+
 hr {
   border: none !important;
-  border-top: 1px solid var(--lightgray) !important;
-  margin: 4rem 0 !important;
+  border-top: 1px solid rgba(65, 72, 104, 0.45) !important;
+  margin: 2.6rem auto !important;
+  max-width: 760px !important;
   position: relative;
   overflow: visible !important;
 
@@ -501,6 +617,388 @@ ul.section-ul > li.section-li > div.section {
 }
 
 /* =========================
+   Folder listing: tile grid layout
+   ========================= */
+
+ul.section-ul {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(180px, 1fr));
+  gap: 14px 18px;
+  max-width: 900px;
+  margin: 1.6rem auto 2.2rem;
+  justify-items: stretch;
+}
+
+ul.section-ul > li.section-li {
+  margin: 0 !important;
+}
+
+ul.section-ul > li.section-li > div.section {
+  display: block !important;
+}
+
+ul.section-ul > li.section-li > div.section > .desc > h3 {
+  margin: 0;
+}
+
+ul.section-ul > li.section-li > div.section > .desc > h3 > a {
+  display: block !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  text-align: center !important;
+  white-space: normal !important;
+  line-height: 1.25 !important;
+  padding: 6px 12px !important;
+  font-size: 0.85rem !important;
+}
+
+
+/* Override earlier button sizing so the grid can lay out cleanly */
+ul.section-ul > li.section-li a {
+  min-width: 0 !important;
+  margin: 0 !important;
+}
+
+@media (max-width: 1100px) {
+  ul.section-ul {
+    grid-template-columns: repeat(3, minmax(180px, 1fr));
+  }
+}
+
+@media (max-width: 900px) {
+  ul.section-ul {
+    grid-template-columns: repeat(2, minmax(180px, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  ul.section-ul {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Folder intro block */
+.folder-intro {
+  max-width: 720px;
+  margin: 0.4rem auto 1rem;
+  padding: 0.65rem 0.9rem;
+  text-align: center;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(65, 72, 104, 0.35);
+  border-radius: 10px;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.3);
+}
+
+/* =========================
+   Tables: improve readability for dense lists
+   ========================= */
+
+.content table {
+  border-collapse: collapse;
+  max-width: 880px;
+  margin: 0 auto;
+}
+
+.content table th,
+.content table td {
+  padding: 0.45rem 0.6rem;
+}
+
+.content table thead th {
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  border-bottom: 1px solid rgba(65, 72, 104, 0.45);
+}
+
+.content table tbody tr {
+  border-bottom: 1px solid rgba(65, 72, 104, 0.3);
+}
+
+.content table tbody tr:nth-child(even) {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+/* =========================
+   Headings: tighter editorial rhythm
+   ========================= */
+
+.content h2 {
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 1.2rem;
+  margin-top: 1.4rem;
+  margin-bottom: 0.4rem;
+  border-bottom: 1px solid rgba(65, 72, 104, 0.4);
+  padding-bottom: 0.25rem;
+}
+
+.content h3 {
+  margin-top: 1.3rem;
+  margin-bottom: 0.4rem;
+}
+
+.content h2 + p,
+.content h3 + p {
+  margin-top: 0.4rem;
+}
+
+/* Center the home page title */
+body[data-slug="index"] .article-title {
+  text-align: center;
+}
+
+body[data-slug="index"] h2,
+body[data-slug="index"] h3 {
+  text-align: center;
+}
+
+/* =========================
+   Breadcrumbs: compact pill style
+   ========================= */
+
+.breadcrumb-container {
+  gap: 0.35rem !important;
+}
+
+.breadcrumb-element {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(65, 72, 104, 0.35);
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.breadcrumb-element:last-child {
+  background: rgba(255, 158, 100, 0.12);
+  border-color: rgba(255, 158, 100, 0.35);
+  color: rgba(255, 220, 200, 0.9);
+}
+
+.breadcrumb-element a,
+.breadcrumb-element p {
+  margin: 0 !important;
+  color: rgba(255, 255, 255, 0.75) !important;
+  text-decoration: none !important;
+}
+
+/* =========================
+   Sidebar polish
+   ========================= */
+
+.sidebar {
+  padding: 1rem 0.85rem 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.sidebar .profile-card {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.05),
+    rgba(255, 255, 255, 0.02)
+  );
+  border: 1px solid rgba(65, 72, 104, 0.45);
+  border-radius: 14px;
+  padding: 0.8rem;
+  box-shadow: 0 12px 26px rgba(0, 0, 0, 0.35);
+}
+
+.sidebar .profile-card .card-title {
+  margin-top: 0.45rem;
+  font-size: 0.9rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.sidebar .search {
+  max-width: 100%;
+  margin: 0.1rem 0 0.6rem;
+}
+
+.sidebar .search .search-button {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(65, 72, 104, 0.7);
+  border-radius: 10px;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+}
+
+.sidebar .explorer {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.035),
+    rgba(255, 255, 255, 0.015)
+  );
+  border: 1px solid rgba(65, 72, 104, 0.5);
+  border-radius: 16px;
+  padding: 0.6rem 0.6rem 0.7rem;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.4);
+}
+
+.sidebar .explorer ul {
+  padding-left: 0.3rem !important;
+}
+
+.sidebar .explorer .explorer-content {
+  overflow: visible !important;
+  max-height: none !important;
+}
+
+.sidebar .explorer .explorer-content::-webkit-scrollbar {
+  display: none !important;
+}
+
+.sidebar .explorer .explorer-ul {
+  overflow: visible !important;
+}
+
+.sidebar {
+  overflow: visible !important;
+}
+
+.sidebar .explorer .overflow {
+  overflow: visible !important;
+}
+
+.sidebar .explorer .overflow::-webkit-scrollbar {
+  display: none !important;
+}
+
+.sidebar .explorer {
+  scrollbar-width: none !important;
+}
+
+.sidebar .explorer svg {
+  opacity: 0 !important;
+  transform: scale(0.8) translateY(0.5px) !important;
+  transition: opacity 120ms ease !important;
+  pointer-events: none !important;
+}
+
+.sidebar .explorer li > div:hover svg,
+.sidebar .explorer li > a:hover svg {
+  opacity: 0.45 !important;
+}
+.sidebar .explorer li > div,
+.sidebar .explorer li > a {
+  border-radius: 10px;
+  padding: 0.3rem 0.5rem;
+  transition: background 120ms ease, color 120ms ease, box-shadow 120ms ease;
+}
+
+.sidebar .explorer li > div:hover,
+.sidebar .explorer li > a:hover {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.sidebar .explorer li > div:hover .folder-title,
+.sidebar .explorer li > a:hover {
+  color: var(--secondary) !important;
+}
+
+.sidebar .explorer-header,
+.sidebar .explorer h2 {
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.75rem;
+  color: var(--secondary) !important;
+}
+
+.sidebar .explorer a[aria-current="page"] {
+  background: rgba(255, 158, 100, 0.08);
+  box-shadow: 0 0 0 1px rgba(255, 158, 100, 0.25);
+  color: var(--secondary) !important;
+}
+
+.sidebar .explorer li:has(a[aria-current="page"]) > div {
+  background: transparent !important;
+  box-shadow: none !important;
+  color: #35d07f !important;
+}
+
+.sidebar .explorer li:has(a[aria-current="page"]) > div:hover {
+  background: rgba(255, 255, 255, 0.06) !important;
+  box-shadow: 0 0 0 1px rgba(53, 208, 127, 0.24) !important;
+}
+
+/* =========================
+   Callouts: card treatment
+   ========================= */
+
+.callout {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(65, 72, 104, 0.4);
+  border-radius: 12px;
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.3);
+  padding: 0.6rem 0.8rem;
+}
+
+.callout-title {
+  font-weight: 700;
+  letter-spacing: 0.2px;
+}
+
+.callout-content {
+  color: rgba(255, 255, 255, 0.78);
+}
+
+/* =========================
+   Code blocks: language tag label
+   ========================= */
+
+figure[data-rehype-pretty-code-figure] pre[data-language] {
+  padding-top: 1.6rem !important;
+}
+
+figure[data-rehype-pretty-code-figure] pre[data-language]::before {
+  content: attr(data-language);
+  position: absolute;
+  top: 0.35rem;
+  left: 0.6rem;
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: rgba(255, 255, 255, 0.65);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(65, 72, 104, 0.45);
+  border-radius: 999px;
+  padding: 0.1rem 0.4rem;
+  z-index: 2;
+}
+
+/* Subtle clipboard button */
+.clipboard-button {
+  padding: 0.2rem !important;
+  margin: 0.25rem !important;
+  border-radius: 6px !important;
+  background: rgba(255, 255, 255, 0.04) !important;
+  border-color: rgba(65, 72, 104, 0.45) !important;
+  opacity: 0 !important;
+  top: 0.35rem !important;
+  right: 0.35rem !important;
+}
+
+.clipboard-button > svg {
+  width: 14px !important;
+  height: 14px !important;
+  filter: contrast(0.6) !important;
+}
+
+.clipboard-button:hover {
+  border-color: rgba(255, 158, 100, 0.5) !important;
+}
+
+pre:hover > .clipboard-button {
+  opacity: 0.6 !important;
+}
+
+/* =========================
    MOBILE: force single column, remove left/right panels, stop overlap
    ========================= */
 @media (max-width: 900px) {
@@ -587,4 +1085,3 @@ ul.section-ul > li.section-li > div.section {
     margin-right: 0.6rem;
   }
 }
-

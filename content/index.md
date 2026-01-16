@@ -2,19 +2,19 @@
 title: Welcome to Commando Manual
 ---
 
-This page is solely dedicated to writeups and knowledge sharing. 
-
-## Always keep learning. Be Useful!
+ 
 
 ---
 
-## Sections
+<div class="section-chips">
+  <a class="section-chip" href="/Methodology/">Methodology</a>
+  <a class="section-chip" href="/BugForge/">BugForge</a>
+  <a class="section-chip" href="/Hacksmarter/">Hacksmarter</a>
+  <a class="section-chip" href="/Hackthebox/">Hackthebox</a>
+  <a class="section-chip" href="/PwnedLabs/">PwnedLabs</a>
+</div>
 
-- [Methodology](/Methodology/)
-- [BugForge](/BugForge/)
-- [Hacksmarter](/Hacksmarter/)
-- [Hackthebox](/Hackthebox/)
-- [PwnedLabs](/PwnedLabs/)
+## Always keep learning. Be Useful! 🧠💪
 
 ---
 
@@ -34,6 +34,3 @@ This page is solely dedicated to writeups and knowledge sharing.
 | Program                                                | Achieved |
 | ------------------------------------------------------ | -------- |
 | **Bachelor of Applied Cybersecurity – SANS Institute** | 2026     |
-
-
-

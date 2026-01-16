@@ -101,11 +101,18 @@ export default ((opts?: Partial<FolderContentOptions>) => {
         ? fileData.description
         : htmlToJsx(fileData.filePath!, tree)
     ) as ComponentChildren
+    const showFolderIntro =
+      (tree as Root).children.length === 0 && !fileData.description
 
     return (
       <div class="popover-hint">
         <article class={classes}>{content}</article>
         <div class="page-listing">
+          {showFolderIntro && (
+            <div class="folder-intro">
+              Explore the writeups below.
+            </div>
+          )}
           {options.showFolderCount && (
             <p>
               {i18n(cfg.locale).pages.folderContent.itemsUnderFolder({
