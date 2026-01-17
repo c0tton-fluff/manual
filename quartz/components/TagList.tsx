@@ -6,18 +6,21 @@ const TagList: QuartzComponent = ({ fileData, displayClass }: QuartzComponentPro
   const tags = fileData.frontmatter?.tags
   if (tags && tags.length > 0) {
     return (
-      <ul class={classNames(displayClass, "tags")}>
-        {tags.map((tag) => {
-          const linkDest = resolveRelative(fileData.slug!, `tags/${tag}` as FullSlug)
-          return (
-            <li>
-              <a href={linkDest} class="internal tag-link">
-                {tag}
-              </a>
-            </li>
-          )
-        })}
-      </ul>
+      <div class={classNames(displayClass, "tag-list")}>
+        <div class="tag-list-title">Tags</div>
+        <ul class="tags">
+          {tags.map((tag) => {
+            const linkDest = resolveRelative(fileData.slug!, `tags/${tag}` as FullSlug)
+            return (
+              <li>
+                <a href={linkDest} class="internal tag-link">
+                  {tag}
+                </a>
+              </li>
+            )
+          })}
+        </ul>
+      </div>
     )
   } else {
     return null
@@ -25,12 +28,27 @@ const TagList: QuartzComponent = ({ fileData, displayClass }: QuartzComponentPro
 }
 
 TagList.css = `
+.tag-list {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin: 0.6rem 0 1rem;
+}
+
+.tag-list-title {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  opacity: 0.7;
+}
+
 .tags {
   list-style: none;
   display: flex;
   padding-left: 0;
   gap: 0.4rem;
-  margin: 1rem 0;
+  margin: 0;
   flex-wrap: wrap;
 }
 

@@ -53,4 +53,27 @@ Today's daily challenge is a straightforward one, but I used BurpSuite with MCP 
 - Thank you for reading, my first (of many to come) published writeup! 
 - Keep Learning and Be Useful! 
 
+## Security Takeaways
+### Impact
+
+  - Unauthorized access to other users’ data via IDOR
+  - Potential exposure of private content and user metadata
+  - Demonstrates broken authorization logic
+
+### Vulnerability Classification
+
+  - OWASP Top 10: Broken Access Control
+  - Vulnerability Type: IDOR (Insecure Direct Object Reference)
+  - CWE: CWE-639 – Authorization Bypass Through User-Controlled Key
+
+  Root Cause
+  The backend trusts client‑controlled identifiers (e.g. resource IDs in GET requests) without verifying that the authenticated user is allowed to access the referenced object.
+
+### Remediation
+
+  - Enforce server‑side authorization checks on every object access
+  - Validate ownership or access rights before returning data
+  - Avoid using predictable, sequential IDs where possible
+  - Add logging and alerting for unusual access patterns
+
 

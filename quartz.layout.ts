@@ -54,6 +54,7 @@ export const defaultContentPageLayout: PageLayout = {
     }),
     Component.Explorer({
       title: "Explore ...",
+      folderClickBehavior: "collapse",
       sortFn: pinMethodologyFirst,
     }),
   ],
@@ -75,9 +76,9 @@ export const defaultListPageLayout: PageLayout = {
     }),
     Component.Explorer({
       title: "Explore ...",
+      folderClickBehavior: "collapse",
       sortFn: pinMethodologyFirst,
     }),
   ],
   right: [],
 }
-

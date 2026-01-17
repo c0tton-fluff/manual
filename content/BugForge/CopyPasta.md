@@ -29,4 +29,27 @@ Today's challenge: Broken Access Control
 
 ![Daily7](/BugForge/img/copy-07.png)
 
-- Keep learning and be useful! 
+- Keep learning and be useful!
+
+## Security Takeaways
+### Impact
+
+  - Unauthorized access to other users’ snippets
+  - Ability to modify or delete content without ownership
+  - Data integrity and confidentiality at risk
+
+### Vulnerability Classification
+
+  - OWASP Top 10: Broken Access Control
+  - Vulnerability Type: IDOR / improper access control on resource endpoints
+  - CWE: CWE-639 – Authorization Bypass Through User-Controlled Key
+
+### Root Cause
+  - The API trusts user‑supplied identifiers in /api/snippets/{id} and does not enforce ownership checks on read/update/delete operations.
+
+### Remediation
+
+  - Enforce object‑level authorization on all snippet endpoints
+  - Validate ownership before read, update, or delete
+  - Use access control middleware consistently across all methods
+  - Add audit logging for unauthorized access attempts

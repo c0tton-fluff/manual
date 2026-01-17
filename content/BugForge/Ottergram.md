@@ -115,7 +115,27 @@ Server response contained:
 `42["message-preview",{"messageId":1,"preview":"bug{...} ..."}]`
 
 
-
-
 - Keep learning and Be Useful!
 
+## Security Takeaways
+### Impact
+
+  - Unauthorized access to other users’ private message previews
+  - Disclosure of sensitive content through WebSocket events
+  - Confirms broken authorization in real‑time features
+
+### Vulnerability Classification
+
+  - OWASP Top 10: Broken Access Control
+  - Vulnerability Type: IDOR over WebSockets
+  - CWE: CWE-639 – Authorization Bypass Through User-Controlled Key
+
+### Root Cause
+  - The WebSocket handler trusts the client‑supplied messageId and returns previews without verifying that the authenticated user owns the message.
+
+### Remediation
+
+  - Enforce ownership checks for all WebSocket message events
+  - Validate message access server‑side before sending previews
+  - Apply consistent authorization logic across REST and WebSocket handlers
+  - Add logging/monitoring for abnormal messageId access patterns

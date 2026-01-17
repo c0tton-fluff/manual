@@ -6,19 +6,9 @@ title: Welcome to Commando Manual
 
 ---
 
-<div class="section-chips">
-  <a class="section-chip" href="/Methodology/">Methodology</a>
-  <a class="section-chip" href="/BugForge/">BugForge</a>
-  <a class="section-chip" href="/Hacksmarter/">Hacksmarter</a>
-  <a class="section-chip" href="/Hackthebox/">Hackthebox</a>
-  <a class="section-chip" href="/Pwnedlabs/">Pwnedlabs</a>
-</div>
+## 🧠 Keep learning ... always! 💪
+<div style="height:360px;"></div>
 
-## 🧠 Always keep learning. Be Useful! 💪
-
----
-
-<br><br>
 
 | Certification | Year | Focus                                                                         |
 | ------------- | ---- | ----------------------------------------------------------------------------- |
