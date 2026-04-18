@@ -11,7 +11,7 @@ const config: QuartzConfig = {
     pageTitle: "",
     pageTitleSuffix: "",
     enableSPA: true,
-    enablePopovers: true,
+    enablePopovers: false,
     analytics: {
       provider: "plausible",
     },
@@ -21,35 +21,36 @@ const config: QuartzConfig = {
     defaultDateType: "modified",
     theme: {
       fontOrigin: "googleFonts",
-      stylesheets: ["quartz/styles/custom.css"],
+      stylesheets: [],
       cdnCaching: true,
       typography: {
         header: "JetBrains Mono",
-        body: "JetBrains Mono",
-        code: "Jetbrains Mono",
+        body: "IBM Plex Sans",
+        code: "JetBrains Mono",
       },
       colors: {
         lightMode: {
-          light: "#faf8f8",
-          lightgray: "#e5e5e5",
-          gray: "#b8b8b8",
-          darkgray: "#4e4e4e",
-          dark: "#2b2b2b",
-          secondary: "#284b63",
-          tertiary: "#84a59d",
-          highlight: "rgba(143, 159, 169, 0.15)",
-          textHighlight: "#fff23688",
+          light: "#0d0d0d",
+          lightgray: "#1a1a1a",
+          gray: "#666666",
+          darkgray: "#e8e6e3",
+          dark: "#ffffff",
+          secondary: "#cda54b",
+          tertiary: "#f4d03f",
+          highlight: "rgba(205, 165, 75, 0.08)",
+          textHighlight: "#cda54b44",
         },
-	darkMode: {
-	  light: "#0d0d0d",      // True black background
-	  lightgray: "#1a1a1a",  // Subtle surface
-	  gray: "#666666",       // Muted gray
-	  darkgray: "#e8e6e3",   // Cream body text
-	  dark: "#ffffff",       // White headers
-	  secondary: "#e8e6e3",  // Cream accent (was cyan)
-	  tertiary: "#f5f0e8",   // Warm cream hover
-	  highlight: "rgba(245, 240, 232, 0.08)",  // Cream tint
-	},
+        darkMode: {
+          light: "#0d0d0d",
+          lightgray: "#1a1a1a",
+          gray: "#666666",
+          darkgray: "#e8e6e3",
+          dark: "#ffffff",
+          secondary: "#cda54b",
+          tertiary: "#f4d03f",
+          highlight: "rgba(205, 165, 75, 0.08)",
+          textHighlight: "#cda54b44",
+        },
       },
     },
   },
@@ -61,7 +62,7 @@ const config: QuartzConfig = {
       }),
       Plugin.SyntaxHighlighting({
         theme: {
-          light: "github-light",
+          light: "dracula",
           dark: "dracula",
         },
         keepBackground: false,

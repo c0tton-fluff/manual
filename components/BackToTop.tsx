@@ -21,9 +21,9 @@ export default (() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #0d0d0d;
-  border: 1px dashed rgba(255, 255, 255, 0.25);
-  color: rgba(255, 255, 255, 0.6);
+  background: var(--light);
+  border: 1px dashed var(--border-dashed, rgba(255,255,255,0.15));
+  color: var(--text-muted, rgba(255,255,255,0.6));
   cursor: pointer;
   opacity: 0;
   visibility: hidden;
@@ -31,24 +31,16 @@ export default (() => {
   z-index: 999;
 }
 
-.back-to-top.visible {
-  opacity: 1;
-  visibility: visible;
-}
+.back-to-top.visible { opacity: 1; visibility: visible; }
 
 .back-to-top:hover {
-  border-color: rgba(255, 255, 255, 0.5);
-  color: #ffffff;
+  border-color: var(--border-dashed-hover, rgba(255,255,255,0.4));
+  color: var(--dark);
   background: rgba(255, 255, 255, 0.05);
 }
 
 @media (max-width: 768px) {
-  .back-to-top {
-    bottom: 1rem;
-    right: 1rem;
-    width: 36px;
-    height: 36px;
-  }
+  .back-to-top { bottom: 1rem; right: 1rem; width: 36px; height: 36px; }
 }
 `
 

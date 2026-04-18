@@ -48,8 +48,10 @@ export default ((_opts?: MachineCardOptions) => {
     }
     const statusIcon = status ? statusIcons[status.toLowerCase()] || "" : ""
 
+    const glowColor = diffColor ? `0 0 10px ${diffColor}40, 0 0 20px ${diffColor}20` : undefined
+
     return (
-      <div class="machine-card">
+      <div class="machine-card" style={glowColor ? `box-shadow: ${glowColor}` : undefined}>
         {platform && (
           <div class="machine-card-item">
             <span class="machine-card-label">Platform</span>
@@ -59,7 +61,7 @@ export default ((_opts?: MachineCardOptions) => {
         {difficulty && (
           <div class="machine-card-item">
             <span class="machine-card-label">Difficulty</span>
-            <span class="machine-card-value difficulty" style={`color: ${diffColor}`}>
+            <span class="machine-card-value difficulty" style={`color: ${diffColor}; text-shadow: 0 0 8px ${diffColor}80`}>
               {difficulty}
             </span>
           </div>
@@ -88,7 +90,7 @@ export default ((_opts?: MachineCardOptions) => {
   flex-wrap: wrap;
   gap: 0;
   margin: 1rem 0 1.5rem 0;
-  border: 1px dashed rgba(255, 255, 255, 0.25);
+  border: 1px dashed var(--border-dashed, rgba(255,255,255,0.15));
   background: transparent;
   width: fit-content;
 }
@@ -97,60 +99,48 @@ export default ((_opts?: MachineCardOptions) => {
   display: flex;
   flex-direction: column;
   padding: 0.75rem 1.25rem;
-  border-right: 1px dashed rgba(255, 255, 255, 0.15);
+  border-right: 1px dashed var(--border-dashed, rgba(255,255,255,0.15));
 }
 
-.machine-card-item:last-child {
-  border-right: none;
-}
+.machine-card-item:last-child { border-right: none; }
 
 .machine-card-label {
   font-size: 0.65rem;
   text-transform: uppercase;
   letter-spacing: 0.15em;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--text-muted, rgba(255,255,255,0.5));
   margin-bottom: 0.25rem;
+  font-family: var(--bodyFont);
 }
 
 .machine-card-value {
   font-size: 0.85rem;
   font-weight: 500;
-  color: #ffffff;
+  color: var(--dark);
   text-transform: capitalize;
+  font-family: var(--headerFont);
 }
 
-.machine-card-value.difficulty {
-  font-weight: 600;
-}
+.machine-card-value.difficulty { font-weight: 600; }
 
 .machine-card-value.vuln {
-  color: #cda54b;
+  color: var(--accent-brass, #cda54b);
   text-transform: uppercase;
   font-size: 0.75rem;
   letter-spacing: 0.05em;
 }
 
 @media (max-width: 600px) {
-  .machine-card {
-    flex-direction: column;
-    width: 100%;
-  }
-
+  .machine-card { flex-direction: column; width: 100%; }
   .machine-card-item {
     border-right: none;
-    border-bottom: 1px dashed rgba(255, 255, 255, 0.15);
+    border-bottom: 1px dashed var(--border-dashed, rgba(255,255,255,0.15));
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
   }
-
-  .machine-card-item:last-child {
-    border-bottom: none;
-  }
-
-  .machine-card-label {
-    margin-bottom: 0;
-  }
+  .machine-card-item:last-child { border-bottom: none; }
+  .machine-card-label { margin-bottom: 0; }
 }
 `
 

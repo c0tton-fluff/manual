@@ -1,5 +1,84 @@
 ---
-title: Keep Learning & Be Useful 💪🧠
+title: Keep Learning & Be Useful
+---
+
+<div class="hero-matrix-area">
+  <canvas id="particle-canvas"></canvas>
+  <div class="hero-fade"></div>
+</div>
+<div class="hero-intro">
+  <div class="terminal-line">
+    <span class="terminal-prompt">$</span>
+    <span class="terminal-text" id="terminal-text"></span>
+    <span class="terminal-cursor"></span>
+  </div>
+  <p class="hero-tagline">Purple Teamer. Passionate about AI security, offensive tooling, and building what doesn't exist yet. Breaking things, sharing everything.</p>
+</div>
+
+---
+
+## Featured
+
+<div class="featured-grid">
+  <a href="/Methodology" class="featured-card">
+    <span class="featured-icon">&#9776;</span>
+    <div class="featured-body">
+      <span class="featured-title">Methodology</span>
+      <span class="featured-desc">Web app testing methodology, technique reference, and tooling notes.</span>
+    </div>
+    <span class="featured-arrow">&#8594;</span>
+  </a>
+  <a href="/BugForge" class="featured-card">
+    <span class="featured-icon">&#9881;</span>
+    <div class="featured-body">
+      <span class="featured-title">BugForge</span>
+      <span class="featured-desc">Writeups from BugForge challenges -- BAC, IDOR, XSS, SQLi, business logic.</span>
+    </div>
+    <span class="featured-arrow">&#8594;</span>
+  </a>
+  <a href="/Hackthebox" class="featured-card">
+    <span class="featured-icon">&#9760;</span>
+    <div class="featured-body">
+      <span class="featured-title">HackTheBox</span>
+      <span class="featured-desc">Machine and Sherlock walkthroughs with full exploitation chains.</span>
+    </div>
+    <span class="featured-arrow">&#8594;</span>
+  </a>
+  <a href="/Brain-Sharing" class="featured-card">
+    <span class="featured-icon">&#9889;</span>
+    <div class="featured-body">
+      <span class="featured-title">Brain Sharing</span>
+      <span class="featured-desc">Guides, setups, and knowledge sharing from the field.</span>
+    </div>
+    <span class="featured-arrow">&#8594;</span>
+  </a>
+</div>
+
+---
+
+## Progress
+
+<div class="progress-section">
+  <div class="progress-item">
+    <div class="progress-label">
+      <span>GIAC Certifications</span>
+      <span>9 / 9</span>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-fill" data-width="100%"></div>
+    </div>
+  </div>
+  <div class="progress-item">
+    <div class="progress-label">
+      <span>BSc Applied Cybersecurity</span>
+      <span>Completed Jan 2026</span>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-fill" data-width="100%"></div>
+    </div>
+  </div>
+</div>
+
 ---
 
 ## Certifications
@@ -48,6 +127,6 @@ title: Keep Learning & Be Useful 💪🧠
 <div class="cert-grid">
   <a href="https://www.sans.edu/cyber-security-programs/bachelors-degree/" class="cert-card cert-card-wide">
     <span class="cert-code">Bachelor of Applied Cybersecurity</span>
-    <span class="cert-desc">SANS Technology Institute - Expected 2026</span>
+    <span class="cert-desc">SANS Technology Institute - Achieved 2026</span>
   </a>
 </div>
