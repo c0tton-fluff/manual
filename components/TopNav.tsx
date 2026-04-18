@@ -240,69 +240,16 @@ if (hamburger && mobileMenu) {
   })
 }
 
-// Boot sequence (first visit only)
-function initBoot() {
-  if (sessionStorage.getItem('booted')) return
-  sessionStorage.setItem('booted', '1')
-
-  const overlay = document.createElement('div')
-  overlay.className = 'boot-overlay'
-  const container = document.createElement('div')
-  container.className = 'boot-lines'
-  overlay.appendChild(container)
-  document.body.appendChild(overlay)
-
-  const lines = [
-    { text: 'BIOS v4.2.0 -- POST check', delay: 0 },
-    { text: 'Memory: 32768 MB ................ <span class="ok">[OK]</span>', delay: 150 },
-    { text: 'CPU: Apple Silicon M-series ..... <span class="ok">[OK]</span>', delay: 250 },
-    { text: 'Loading kernel modules .......... <span class="ok">[OK]</span>', delay: 400 },
-    { text: 'Mounting /dev/brain ............. <span class="ok">[OK]</span>', delay: 550 },
-    { text: 'Starting offensive toolkit ...... <span class="ok">[OK]</span>', delay: 700 },
-    { text: 'Initializing pentest-env ........ <span class="ok">[OK]</span>', delay: 850 },
-    { text: '<span class="dim">root@kali</span>:~$ <span class="ok">ready</span>', delay: 1000 },
-  ]
-
-  lines.forEach(function(line) {
-    const el = document.createElement('div')
-    el.className = 'boot-line'
-    el.innerHTML = line.text
-    container.appendChild(el)
-    setTimeout(function() { el.classList.add('show') }, line.delay)
-  })
-
-  setTimeout(function() {
-    overlay.classList.add('done')
-    setTimeout(function() { overlay.remove() }, 500)
-  }, 1600)
-}
-initBoot()
-
-// Page wipe element
-function ensureWipe() {
-  if (!document.querySelector('.page-wipe')) {
-    const wipe = document.createElement('div')
-    wipe.className = 'page-wipe'
-    document.body.appendChild(wipe)
-  }
-}
-ensureWipe()
-
 // Terminal typewriter
 function initTypewriter() {
   const el = document.getElementById('terminal-text')
   if (!el) return
 
   const commands = [
-    'nmap -sC -sV target',
-    'phantom detect bac',
-    'GPEN // Penetration Tester',
-    'sqlmap --batch --dbs',
-    'GCFA // Forensic Analyst',
+    'phantom detect bac --dir engagements/target',
+    'nmap -sC -sV 10.10.10.x',
     'burp-go send POST /api/auth',
-    'GSEC // Security Essentials',
-    'ffuf -w wordlist -u FUZZ',
-    'GCIA // Intrusion Analyst',
+    'sqlmap --batch --dbs',
   ]
 
   let cmdIdx = 0
@@ -317,10 +264,10 @@ function initTypewriter() {
       charIdx++
       if (charIdx >= current.length) {
         deleting = true
-        pauseTimer = setTimeout(tick, 2000)
+        pauseTimer = setTimeout(tick, 2500)
         return
       }
-      pauseTimer = setTimeout(tick, 60 + Math.random() * 40)
+      pauseTimer = setTimeout(tick, 55 + Math.random() * 35)
     } else {
       el.textContent = current.substring(0, charIdx)
       charIdx--
@@ -328,10 +275,10 @@ function initTypewriter() {
         deleting = false
         charIdx = 0
         cmdIdx = (cmdIdx + 1) % commands.length
-        pauseTimer = setTimeout(tick, 400)
+        pauseTimer = setTimeout(tick, 500)
         return
       }
-      pauseTimer = setTimeout(tick, 30)
+      pauseTimer = setTimeout(tick, 25)
     }
   }
 
@@ -339,240 +286,6 @@ function initTypewriter() {
   window.addCleanup?.(() => clearTimeout(pauseTimer))
 }
 initTypewriter()
-
-// Matrix rain -- green, slow, fading
-function initMatrix() {
-  const canvas = document.getElementById('particle-canvas')
-  if (!canvas) return
-  const ctx = canvas.getContext('2d')
-  if (!ctx) return
-
-  let animId, lastTime = 0
-  const frameInterval = 80
-  const katakana = '\u30A0\u30A1\u30A2\u30A3\u30A4\u30A5\u30A6\u30A7\u30A8\u30A9\u30AA\u30AB\u30AC\u30AD\u30AE\u30AF'
-  const latin = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-  const nums = '0123456789'
-  const symbols = ':.<>{}[]|/='
-  const chars = katakana + latin + nums + symbols
-  const fontSize = 14
-  let columns, streams
-
-  function resize() {
-    const rect = canvas.parentElement.getBoundingClientRect()
-    canvas.width = rect.width
-    canvas.height = rect.height
-    columns = Math.floor(canvas.width / fontSize)
-    if (!streams || streams.length !== columns) {
-      streams = []
-      for (let i = 0; i < columns; i++) {
-        streams.push({
-          y: Math.random() * -100,
-          speed: 0.3 + Math.random() * 0.4,
-          length: 8 + Math.floor(Math.random() * 16),
-          chars: [],
-          active: Math.random() > 0.3,
-          respawnDelay: Math.floor(Math.random() * 60),
-          wait: 0,
-        })
-        for (let j = 0; j < streams[i].length; j++) {
-          streams[i].chars.push(chars[Math.floor(Math.random() * chars.length)])
-        }
-      }
-    }
-  }
-  resize()
-
-  function draw(timestamp) {
-    animId = requestAnimationFrame(draw)
-    if (timestamp - lastTime < frameInterval) return
-    lastTime = timestamp
-
-    ctx.fillStyle = 'rgba(10, 10, 10, 0.12)'
-    ctx.fillRect(0, 0, canvas.width, canvas.height)
-    ctx.font = fontSize + 'px monospace'
-
-    for (let i = 0; i < columns; i++) {
-      const s = streams[i]
-
-      if (!s.active) {
-        s.wait++
-        if (s.wait > s.respawnDelay) {
-          s.active = true
-          s.y = Math.random() * -20
-          s.speed = 0.3 + Math.random() * 0.4
-          s.wait = 0
-        }
-        continue
-      }
-
-      const x = i * fontSize
-
-      for (let j = 0; j < s.length; j++) {
-        const charY = (s.y - j) * fontSize
-        if (charY < 0 || charY > canvas.height) continue
-
-        if (Math.random() < 0.03) {
-          s.chars[j] = chars[Math.floor(Math.random() * chars.length)]
-        }
-
-        const fade = 1 - (j / s.length)
-
-        if (j === 0) {
-          ctx.fillStyle = 'rgba(180, 255, 180, ' + (0.9 * fade) + ')'
-          ctx.shadowColor = '#00ff41'
-          ctx.shadowBlur = 8
-        } else if (j < 3) {
-          ctx.fillStyle = 'rgba(0, 255, 65, ' + (0.7 * fade) + ')'
-          ctx.shadowColor = 'transparent'
-          ctx.shadowBlur = 0
-        } else {
-          ctx.fillStyle = 'rgba(0, 180, 40, ' + (0.5 * fade) + ')'
-          ctx.shadowBlur = 0
-        }
-
-        ctx.fillText(s.chars[j], x, charY)
-      }
-      ctx.shadowBlur = 0
-
-      s.y += s.speed
-
-      if ((s.y - s.length) * fontSize > canvas.height) {
-        s.active = false
-        s.respawnDelay = 20 + Math.floor(Math.random() * 80)
-        s.wait = 0
-        s.length = 8 + Math.floor(Math.random() * 16)
-        s.chars = []
-        for (let j = 0; j < s.length; j++) {
-          s.chars.push(chars[Math.floor(Math.random() * chars.length)])
-        }
-      }
-    }
-  }
-  animId = requestAnimationFrame(draw)
-
-  const ro = new ResizeObserver(resize)
-  ro.observe(canvas.parentElement)
-
-  window.addCleanup?.(() => {
-    cancelAnimationFrame(animId)
-    ro.disconnect()
-  })
-}
-initMatrix()
-
-// Cursor trail
-function initCursorTrail() {
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
-  if ('ontouchstart' in window) return
-
-  const dotCount = 8
-  const dots = []
-
-  for (let i = 0; i < dotCount; i++) {
-    const dot = document.createElement('div')
-    dot.className = 'cursor-dot'
-    dot.style.width = (6 - i * 0.5) + 'px'
-    dot.style.height = (6 - i * 0.5) + 'px'
-    dot.style.opacity = '0'
-    document.body.appendChild(dot)
-    dots.push({ el: dot, x: 0, y: 0 })
-  }
-
-  let mouseX = 0, mouseY = 0, trailAnimId
-
-  document.addEventListener('mousemove', function(e) {
-    mouseX = e.clientX
-    mouseY = e.clientY
-  })
-
-  function animateTrail() {
-    dots[0].x += (mouseX - dots[0].x) * 0.3
-    dots[0].y += (mouseY - dots[0].y) * 0.3
-
-    for (let i = 1; i < dotCount; i++) {
-      dots[i].x += (dots[i - 1].x - dots[i].x) * 0.2
-      dots[i].y += (dots[i - 1].y - dots[i].y) * 0.2
-    }
-
-    for (let i = 0; i < dotCount; i++) {
-      dots[i].el.style.left = dots[i].x + 'px'
-      dots[i].el.style.top = dots[i].y + 'px'
-      dots[i].el.style.opacity = String(0.5 - i * 0.06)
-    }
-
-    trailAnimId = requestAnimationFrame(animateTrail)
-  }
-  animateTrail()
-
-  window.addCleanup?.(() => {
-    cancelAnimationFrame(trailAnimId)
-    dots.forEach(d => d.el.remove())
-  })
-}
-initCursorTrail()
-
-// 3D tilt on cards
-function initTiltCards() {
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
-  if ('ontouchstart' in window) return
-
-  const sel = '.cert-card, .home-card'
-  document.querySelectorAll(sel).forEach(function(card) {
-    card.addEventListener('mousemove', function(e) {
-      const rect = card.getBoundingClientRect()
-      const x = (e.clientX - rect.left) / rect.width - 0.5
-      const y = (e.clientY - rect.top) / rect.height - 0.5
-      card.style.transform = 'perspective(600px) rotateY(' + (x * 8) + 'deg) rotateX(' + (-y * 8) + 'deg) translateY(-2px)'
-    })
-    card.addEventListener('mouseleave', function() {
-      card.style.transform = ''
-    })
-  })
-}
-initTiltCards()
-
-// Code block typing animation
-function initCodeTyping() {
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
-
-  const pres = document.querySelectorAll('pre')
-  if (pres.length === 0) return
-
-  const codeObs = new IntersectionObserver(function(entries) {
-    entries.forEach(function(e) {
-      if (!e.isIntersecting) return
-      codeObs.unobserve(e.target)
-      const code = e.target.querySelector('code')
-      if (!code || code.dataset.typed) return
-      code.dataset.typed = '1'
-
-      const fullText = code.textContent || ''
-      if (fullText.length > 500 || fullText.length < 5) return
-
-      const wrapper = document.createElement('span')
-      wrapper.className = 'code-typed'
-      wrapper.textContent = ''
-      code.textContent = ''
-      code.appendChild(wrapper)
-
-      let idx = 0
-      function typeChar() {
-        if (idx < fullText.length) {
-          wrapper.textContent = fullText.substring(0, idx + 1)
-          idx++
-          setTimeout(typeChar, 8 + Math.random() * 4)
-        } else {
-          wrapper.className = ''
-          wrapper.style.borderRight = 'none'
-        }
-      }
-      typeChar()
-    })
-  }, { threshold: 0.3 })
-
-  pres.forEach(function(p) { codeObs.observe(p) })
-}
-initCodeTyping()
 
 // Progress bar animation
 function initProgressBars() {
@@ -661,38 +374,25 @@ function observeRevealElements() {
 }
 observeRevealElements()
 
-// SPA page transitions with wipe
+// Clean SPA page transitions (fade only)
 document.addEventListener('prenav', () => {
-  const wipe = document.querySelector('.page-wipe')
   const center = document.querySelector('.center')
-  if (center) center.style.opacity = '0'
-  if (wipe) {
-    wipe.classList.remove('wipe-out')
-    wipe.classList.add('wipe-in')
+  if (center) {
+    center.style.opacity = '0'
+    center.style.transform = 'translateY(6px)'
   }
 })
 
 document.addEventListener('nav', () => {
   observeRevealElements()
   initTypewriter()
-  initMatrix()
   initProgressBars()
   initCopyFeedback()
-  initTiltCards()
-  initCodeTyping()
-  ensureWipe()
 
-  const wipe = document.querySelector('.page-wipe')
   const center = document.querySelector('.center')
-
-  if (wipe) {
-    wipe.classList.remove('wipe-in')
-    wipe.classList.add('wipe-out')
-    setTimeout(() => wipe.classList.remove('wipe-out'), 350)
-  }
-
   if (center) {
     center.style.opacity = ''
+    center.style.transform = ''
     center.classList.add('page-enter')
     setTimeout(() => center.classList.remove('page-enter'), 300)
   }

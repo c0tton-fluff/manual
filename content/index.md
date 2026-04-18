@@ -2,10 +2,6 @@
 title: Keep Learning & Be Useful
 ---
 
-<div class="hero-matrix-area">
-  <canvas id="particle-canvas"></canvas>
-  <div class="hero-fade"></div>
-</div>
 <div class="hero-intro">
   <div class="terminal-line">
     <span class="terminal-prompt">$</span>
