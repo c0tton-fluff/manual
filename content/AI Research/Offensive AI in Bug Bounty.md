@@ -102,9 +102,9 @@ DARPA's AI Cyber Challenge at DEF CON 33 (August 2025) proved this isn't theoret
 - **18 previously unknown real-world zero-days** discovered
 - **11 zero-days patched during the competition**
 - **Average time to patch: 45 minutes**
-- **Estimated cost per fix: $152**
+- **Estimated cost per fix: \$152**
 
-Team Atlanta won $4M. Trail of Bits took $3M. Theori got $1.5M. The tested targets weren't toys -- they were Linux kernel, Jenkins, Nginx, SQLite, and Apache Tika.
+Team Atlanta won \$4M. Trail of Bits took \$3M. Theori got \$1.5M. The tested targets weren't toys -- they were Linux kernel, Jenkins, Nginx, SQLite, and Apache Tika.
 
 Four of seven finalist systems have been open-sourced. These aren't academic curiosities anymore. They're production-grade autonomous security systems.
 
@@ -177,7 +177,7 @@ The pattern: AI doesn't replace skill. It amplifies it. The hunters using AI eff
 
 ### Muhammad Arslan Akhtar -- The AI Security Engine Approach
 
-A $200K bug bounty career turned into a "Cognitive Security Orchestrator":
+A \$200K bug bounty career turned into a "Cognitive Security Orchestrator":
 - DeepSeek-R1 for Chain-of-Thought reasoning on auth handshakes
 - Llama-3.3-70B (abliterated) for overall strategy
 - Qwen2.5-Coder-32B for code analysis and exploit generation
@@ -196,12 +196,12 @@ The economic shift is measurable:
 | Approach | Cost per Vuln Found | Time | Quality |
 |----------|-------------------|------|---------|
 | Traditional scanner | Low | Minutes | High FP rate |
-| Human-only pentest | $2K-10K+ | Days-weeks | High quality, limited coverage |
-| AI slop submission | ~$0 | Seconds | Zero real bugs |
+| Human-only pentest | \$2K-10K+ | Days-weeks | High quality, limited coverage |
+| AI slop submission | ~\$0 | Seconds | Zero real bugs |
 | AI-augmented expert | Lower than pure human | Hours | Expert quality, broader coverage |
-| Autonomous (AIxCC-class) | ~$152/fix | 45 min | 77% detection, validated |
+| Autonomous (AIxCC-class) | ~\$152/fix | 45 min | 77% detection, validated |
 
-The last row is where things get interesting. $152 per fix with 45-minute turnaround changes the math entirely. Not today at production scale. But the trajectory is clear.
+The last row is where things get interesting. \$152 per fix with 45-minute turnaround changes the math entirely. Not today at production scale. But the trajectory is clear.
 
 ---
 
@@ -257,7 +257,7 @@ The scanner era produced a generation of researchers who could drive tools but n
 
 - [Project Naptime](https://projectzero.google/2024/06/project-naptime.html) -- Google Project Zero, June 2024
 - [From Naptime to Big Sleep](https://projectzero.google/2024/10/from-naptime-to-big-sleep.html) -- First AI-discovered SQLite zero-day, October 2024
-- [DARPA AIxCC at DEF CON 33](https://aicyberchallenge.com/) -- Team Atlanta wins $4M, August 2025
+- [DARPA AIxCC at DEF CON 33](https://aicyberchallenge.com/) -- Team Atlanta wins \$4M, August 2025
 - [Curl ending bug bounty program](https://www.bleepingcomputer.com/news/security/curl-ending-bug-bounty-program-after-flood-of-ai-slop-reports/) -- BleepingComputer, January 2026
 - [AI slop and bug bounties](https://techcrunch.com/2025/07/24/ai-slop-and-fake-reports-are-exhausting-some-security-bug-bounties) -- TechCrunch, July 2025
 - [SHERPA -- LLM-powered fuzzing](https://github.com/AIxCyberChallenge/sherpa) -- AIxCC project
