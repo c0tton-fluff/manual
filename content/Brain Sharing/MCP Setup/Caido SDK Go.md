@@ -109,7 +109,7 @@ Operators: `eq`, `neq`, `cont`, `ncont`, `gte`, `lte`, `gt`, `lt`. Combine with 
 
 ## Relationship to MCP Server
 
-The [Caido MCP Server](Caido%20MCP%20Setup.md) is the primary consumer of this SDK. If you're building custom Go tooling against Caido (scripts, integrations, CI pipelines), use the SDK directly. If you want AI assistant access, use the MCP server which wraps the SDK with tool definitions and credential management.
+The [Caido MCP Server](/Brain-Sharing/MCP-Setup/Caido-MCP-Setup) is the primary consumer of this SDK. If you're building custom Go tooling against Caido (scripts, integrations, CI pipelines), use the SDK directly. If you want AI assistant access, use the MCP server which wraps the SDK with tool definitions and credential management.
 
 | Use case | Use |
 |----------|-----|

