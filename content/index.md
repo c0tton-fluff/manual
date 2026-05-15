@@ -32,11 +32,11 @@ title: Keep Learning & Be Useful
     </div>
     <span class="featured-arrow">&#8594;</span>
   </a>
-  <a href="/Hackthebox" class="featured-card">
-    <span class="featured-icon">&#9760;</span>
+  <a href="/AI-Research" class="featured-card">
+    <span class="featured-icon">&#9883;</span>
     <div class="featured-body">
-      <span class="featured-title">HackTheBox</span>
-      <span class="featured-desc">Machine and Sherlock walkthroughs with full exploitation chains.</span>
+      <span class="featured-title">AI Research</span>
+      <span class="featured-desc">Offensive AI, LLM security research, and the intersection of hacking and machine intelligence.</span>
     </div>
     <span class="featured-arrow">&#8594;</span>
   </a>
