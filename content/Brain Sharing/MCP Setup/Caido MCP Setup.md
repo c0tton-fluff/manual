@@ -7,7 +7,7 @@ tags:
   - go
 ---
 
-MCP server and CLI for the Caido web proxy. Browse, replay, and analyze HTTP traffic from AI assistants or your terminal. Built on the community [Go SDK](/Brain-Sharing/MCP-Setup/Caido-SDK-Go) with OAuth + PAT auth, HTTPQL filtering, session cookie jars, batch operations, and 42 tools + 4 read-only resources.
+MCP server and CLI for the Caido web proxy. Browse, replay, and analyze HTTP traffic from AI assistants or your terminal. Built on the community [Go SDK](/Brain-Sharing/MCP-Setup/Caido-SDK-Go) with OAuth + PAT auth, HTTPQL filtering, session cookie jars, batch operations, and 60 tools + 4 read-only resources.
 
 Source: [c0tton-fluff/caido-mcp-server](https://github.com/c0tton-fluff/caido-mcp-server)
 

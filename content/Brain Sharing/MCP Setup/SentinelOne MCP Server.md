@@ -8,7 +8,7 @@ tags:
   - dfir
 ---
 
-MCP server for SentinelOne EDR. Query threats, manage agents, run Deep Visibility hunts, and check hash reputation from AI assistants. Stdlib-only Go binary -- zero external dependencies.
+MCP server for SentinelOne EDR. Query threats, manage agents, run Deep Visibility hunts, and check hash reputation from AI assistants. Stdlib-only Go binary - zero external dependencies.
 
 Source: [c0tton-fluff/sentinelone-mcp-server](https://github.com/c0tton-fluff/sentinelone-mcp-server)
 
