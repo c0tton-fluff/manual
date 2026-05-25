@@ -46,7 +46,7 @@ The app is a 90s-themed underground shop called "HackersParadise" running on Exp
 - LimeWire-style file sharing/download
 - Guestbook
 - Profile management
-- Admin console (RedPill) -- role-gated
+- Admin console (RedPill) -> role-gated
 
 ### Initial Discovery
 
@@ -75,8 +75,6 @@ But by crawling the HTML pages, many more JS files surface:
 | `/js/guestbook.js` | guestbook.html |
 | `/js/limewire.js` | limewire.html |
 | `/js/redpillconsole.js` | redpillconsole.html |
-
-The hint for this lab was "read JS files" -- meaning the vulnerability is discoverable purely from reading client-side JavaScript.
 
 ---
 
@@ -130,7 +128,7 @@ GET /api/limewire/files
 }
 ```
 
-The `torrent_url` points to `http://localhost:4000/...` -- an internal service.
+The `torrent_url` points to `http://localhost:4000/...` -> an internal service.
 
 ### Key Finding #3: Admin API Endpoints (redpillconsole.js)
 
@@ -200,7 +198,7 @@ The validation checks that the host is `localhost` but does NOT restrict the por
 
 ## 4. Port Enumeration - The Key Step
 
-This is what the hint "path validation bypass" means. The validator allows any localhost port -- just not non-localhost hosts.
+The validator allows any localhost port - just not non-localhost hosts.
 
 ```http
 POST /api/limewire/download HTTP/1.1
@@ -279,7 +277,7 @@ All rabbit holes. Port 4000's redpillconsole endpoints require auth that can't b
 http://localhost:4000/torrent/download/..%2F..%2Fserver.js
 ```
 
-Returns "File not found" -- the traversal works (URL encoding bypasses the router) but there's no file at that path. I tried dozens of filenames. None existed.
+Returns "File not found" -> the traversal works (URL encoding bypasses the router) but there's no file at that path. I tried dozens of filenames. None existed.
 
 ### JWT Attacks
 
@@ -310,7 +308,7 @@ Always says "Password updated" but only changes the requesting user's password. 
 
 ### The Failure
 
-I found the SSRF in under 2 minutes. I then spent 40+ minutes exclusively hammering port 4000 -- path traversal, rabbit hole endpoints, redpillconsole auth bypass, JWT tampering -- all dead ends.
+I found the SSRF in under 2 minutes. I then spent 40+ minutes exclusively hammering port 4000 - path traversal, rabbit hole endpoints, redpillconsole auth bypass, JWT tampering... all dead ends.
 
 The fix was trivial: **try other ports.**
 
@@ -323,16 +321,6 @@ When you confirm SSRF to an internal service, the very next thing to test is:
 3. Are redirects followed?
 
 I confirmed the URL check rejected `localhost:3000` (400) but never tested `localhost:4001`. That's a 1-request test that would have solved the lab immediately.
-
-### The Mental Model Error
-
-I assumed:
-- "URL validation checks for localhost:4000" = "only port 4000 is allowed"
-
-Reality:
-- URL validation checks for `localhost` hostname only
-- Port is unrestricted
-- This is a classic SSRF port scan scenario
 
 ### Rule for Future
 
