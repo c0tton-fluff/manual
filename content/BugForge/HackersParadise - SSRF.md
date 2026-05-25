@@ -198,7 +198,9 @@ The validation checks that the host is `localhost` but does NOT restrict the por
 
 ## 4. Port Enumeration - The Key Step
 
-The validator allows any localhost port - just not non-localhost hosts.
+Once SSRF was confirmed, the next question: what's actually validated? Testing showed `localhost:3000` returns 400 ("Invalid service URL") but `localhost:4000` works fine. The validation checks hostname = `localhost` but does NOT restrict the port. So the bypass is trivial -- just try adjacent ports.
+
+No fragment bypass, no URL encoding tricks. Port 4001 (one away from the known internal service on 4000) was the first probe:
 
 ```http
 POST /api/limewire/download HTTP/1.1
