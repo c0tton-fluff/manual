@@ -11,7 +11,7 @@ tags:
 ---
 
 - A fresh MesaNet variant that swaps the entitlements-override finale for a two-stage server-side story: get past a WAF-hardened OTP gate, then chain an SSRF through an allowlist you have to defeat by pre-normalization path traversal. 
-- Now that we got the ridiculous sentence out of the way ... walkthrough about two days bring stuck on the gate, then a clean unlock once I stopped bruteforcing and reasoned about the layers.
+- Now that we got the ridiculous sentence out of the way ... about two days being stuck on the gate, then a clean unlock once I stopped bruteforcing and reasoned about the layers... lessons learned.
 
 - **Difficulty:** Hard (Weekly Challenge)
 - **Theme:** Half-Life / Black Mesa Research Facility
